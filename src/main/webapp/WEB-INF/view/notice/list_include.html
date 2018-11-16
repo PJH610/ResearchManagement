@@ -1,0 +1,268 @@
+<div id="notice-list-box">
+    <span>通知公告列表</span>
+    <table id="notice-list-table"></table>
+    <div id="notice-list-page" class="page-box"></div>
+    <div id="notice-update-box" style="width: 100%; height: 100%; left: 0; top: 0; position: fixed; z-index: 900; display: none;">
+        <div style="max-width: 100%; max-height: 100%; left: 50%; top: 30%; transform: translate(-50%,-30%); position: fixed; overflow: scroll;">
+            <div class="shadow" style="margin: 15px; padding: 15px; background: white; border-radius: 3px;">
+                <form id="notice-update-form">
+                    <input type="hidden" name="id">
+                    <table>
+                        <tr>
+                            <td>主题：</td>
+                            <td><input type="text" name="theme" autocomplete="off"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="hidden" name="top">
+                                <input class="top" type="checkbox" onclick="$(this).siblings('input[name=top]').val(($(this).prop('checked') ? 'true' : 'false'));">
+                                置顶
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>作者：</td>
+                            <td><input type="text" name="host" autocomplete="off"></td>
+                        </tr>
+                        <tr>
+                            <td>附件：</td>
+                            <td><a name="annex"></a><input type="file" name="file"></td>
+                        </tr>
+                        <tr>
+                            <td>正文：</td>
+                            <td><textarea name="content"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><input type="button" value="修改" onclick="noticeUpdate()"></td>
+                            <td><input type="button" value="取消" onclick="$(this).closest('#notice-update-box').hide();"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="notice-info-box" style="display: none;">
+    <span>通知公告</span>
+    <p id="notice-info-theme"></p>
+    <p>作者(来源)：<span id="notice-info-host"></span></p>
+    <p>发布时间：<span id="notice-info-date"></span></p>
+    <p>内容：<span id="notice-info-content"></span></p>
+    <p id="notice-info-annex"><a name="annex">附件下载</a></p>
+    <a onClick="noticeListBox()">返回</a>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var pageNum = getQueryVariable("page_num");
+        pageNum = pageNum ? pageNum : 1;
+        console.log("init_page: " + pageNum);
+        getNoticeList(pageNum,true);
+    });
+
+    // $(document).ready(function(e) {
+    //     if (window.history && window.history.pushState) {
+    //         console.log("pushState");
+    //         $(window).on('popstate', function (event) {
+    //             var page_num = event.activityState.page_num;
+    //             if(page_num) getNoticeList(page_num, true);
+    //         });
+    //     }
+    // });
+
+    window.onpopstate = function() {
+        if(history.state) {
+            var pageNum =window.history.state.page_num;
+            pageNum = pageNum ? pageNum : 1;
+            getNoticeList(pageNum, true);
+        }
+    };
+
+    var noticeXhr;
+    function getNoticeList(pageNum, popstate) {
+        if (noticeXhr) noticeXhr.abort();
+        noticeXhr = $.ajax({
+            url: "/api/notice/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="theme">' + list[x].theme + '</td>'
+                            + '<td class="host">' + list[x].host + '</td>'
+                            + '<td class="date">' + list[x].date + '</td>'
+                            + '<td class="click">' + list[x].click + '</td>'
+                            + '<td>'
+                            + '<a data-url="/notice/' + list[x].id + '/show" onclick="openPage(this)">浏览</a>'
+                            // + '<a onclick="noticeShow(this)">浏览</a>'
+#if($currentUser.roleType == "CITY_RESEARCH")
+                            + '<a onclick="showNoticeUpdateBox(this)">修改</a>'
+                            + '<a onclick="noticeDelete(this)">删除</a>'
+#end
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>主题</th>'
+                        + '<th>发布</th>'
+                        + '<th>日期</th>'
+                        + '<th>点击率</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#notice-list-table").html(headTr + tr);
+                    initPage($("#notice-list-page"), data, getNoticeList);
+
+                    if(!popstate) history.pushState({page_num:pageNum, container: '#pjax-container'}, null, '?page_num=' + pageNum);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    var updateTr;
+    function showNoticeUpdateBox(item) {
+        var tr = $(item).closest("tr");
+
+        if (noticeXhr) noticeXhr.abort();
+        noticeXhr = $.ajax({
+            url: "/api/notice/show/" + tr.data("id"),
+            type: "get",
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    updateTr = tr;
+
+                    var data = result.data;
+                    var updateBox = $("#notice-update-box").show();
+
+                    updateBox.find("input[name=id]").val(data.id);
+                    updateBox.find("input[name=theme]").val(data.theme);
+                    updateBox.find("input[name=host]").val(data.host);
+                    updateBox.find("textarea[name=content]").val(data.content);
+                    if (data.top) {
+                        updateBox.find("input[name=top]").val("true");
+                        updateBox.find(".top").prop("checked",true);
+                    } else {
+                        updateBox.find("input[name=top]").val("false");
+                        updateBox.find(".top").prop("checked",false);
+                    }
+
+                    updateBox.find("input[name=file]").val("");
+                    if (data.file) {
+                        updateBox.find("a[name=annex]").show().text(data.file.filename).attr("href",data.file.file_uri);
+                        updateBox.find("a[name=annex]").show().text(data.file.filename);
+                    } else {
+                        updateBox.find("a[name=annex]").hide();
+                    }
+
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+    
+    function noticeUpdate() {
+        if (noticeXhr) noticeXhr.abort();
+        noticeXhr = $.ajax({
+            url: "/api/notice/update",
+            type: "post",
+            data: new FormData($("#notice-update-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var updateBox = $("#notice-update-box").hide();
+
+                    updateTr.children(".theme").text(updateBox.find("input[name=theme]").val());
+                    updateTr.children(".host").text(updateBox.find("input[name=host]").val());
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function noticeDelete(item) {
+        if(confirm("是否删除该通知？")){
+            var tr = $(item).closest("tr");
+            $.ajax({
+                url: "/api/notice/delete",
+                type: "post",
+                data: "id=" + tr.data("id"),
+                dataType: "json",
+                beforeSend: function() {
+                },
+                complete: function() {
+                },
+                success: function (result) {
+                    alert(result.msg);
+                    if (result.code == 200) {
+                        tr.remove();
+                    }
+                },error: function (result) {
+
+                }
+            });
+        }
+    }
+
+    function noticeShow(item) {
+        if (noticeXhr) noticeXhr.abort();
+        noticeXhr = $.ajax({
+            url: "/api/notice/show/" + $(item).closest("tr").data("id"),
+            type: "get",
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    $("#notice-list-box").hide();
+                    $("#notice-info-box").show();
+
+                    var data = result.data;
+                    $("#notice-info-theme").text(data.theme);
+                    $("#notice-info-host").text(data.host);
+                    $("#notice-info-date").text(data.date);
+                    if (data.annex) {
+                        $("#notice-info-annex").show().children("a[name=annex]").attr("href", data.annex);
+                    } else {
+                        $("#notice-info-annex").hide();
+                    }
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function noticeListBox() {
+        $("#notice-list-box").show();
+        $("#notice-info-box").hide();
+    }
+</script>

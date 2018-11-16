@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.DownloadFileDao">
+    
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_download_file
+        (file_uri,filename) VALUES
+        <foreach collection ="array" item="file" separator =",">
+            (#{file.fileUri}, #{file.filename})
+        </foreach >
+    </insert>
+
+    <select id="selectById" resultType="com.zhuoyue.researchManement.bean.DownloadFile" parameterType="java.lang.Long">
+        SELECT * FROM tb_download_file WHERE id=#{id}
+    </select>
+
+    <select id="selectByFileUri" resultType="com.zhuoyue.researchManement.bean.DownloadFile" parameterType="java.lang.String">
+        SELECT * FROM tb_download_file WHERE file_uri=#{fileUri}
+    </select>
+
+    <delete id="deleteByFileUri">
+        DELETE FROM tb_download_file WHERE file_uri IN
+        <foreach collection ="array" item="item" open="(" separator ="," close=")">
+            #{fitem},
+        </foreach >
+    </delete>
+</mapper>

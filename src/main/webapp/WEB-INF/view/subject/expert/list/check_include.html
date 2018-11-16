@@ -1,0 +1,68 @@
+<h3>评审意见</h3>
+<table id="subject-specialist-list-table"></table>
+<div id="subject-specialist-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectSpecialistList($pageNum);
+    });
+
+    var recordListXhr;
+    function getSubjectSpecialistList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/subject/specialist/list/check",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        var subject = list[x].subject;
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td>'
+                            + '<a data-url="/subject/' + subject.id + '/approval/main" onclick="openPage(this)">' + subject.name + '</a>'
+                            + '</td>'
+                            + '<td>' + list[x].type.desc + '</td>'
+                            + '<td class="category">' + subject.category.desc + '</td>'
+                            + '<td class="classification">' + subject.classification.desc + '</td>'
+                            + '<td>' + initOperate(list[x].type.value, list[x].subject_id, list[x].id) + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>课题名称</th>'
+                        + '<th>表格类型</th>'
+                        + '<th>课题分类</th>'
+                        + '<th>所属学科</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#subject-specialist-list-table").html(headTr + tr);
+
+                    initPage($("#subject-specialist-list-page"), data, getSubjectSpecialistList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function initOperate(type,subjectId,id) {
+        switch (type) {
+            case 1:
+                return '<a data-url="/subject/' + subjectId + '/show/main" onclick="openPage(this)">查看</a>'
+                    + '<a data-url="/subject/expert/' + id + '/check/subject" onclick="openPage(this)">点评</a>';
+            case 2:
+                return '<a data-url="/subject/' + subjectId + '/medium/show" onclick="openPage(this)">查看</a>'
+                    + '<a data-url="/subject/expert/' + id + '/check/medium" onclick="openPage(this)">点评</a>';
+        }
+        return "";
+    }
+</script>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectResultDao">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.zhuoyue.researchManement.bean.SubjectResult">
+        INSERT INTO tb_subjects_results(subject_id,completetime,finalresult_name,finalresult_shape,principal)
+        VALUE (#{subjectId},#{completetime},#{finalresultName},#{finalresultShape},#{principal})
+    </insert>
+
+    <select id="list" resultType="com.zhuoyue.researchManement.bean.SubjectResult">
+        SELECT * FROM tb_subjects_results WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectById" resultType="com.zhuoyue.researchManement.bean.SubjectResult">
+        SELECT * FROM tb_subjects_results WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectResult">
+        UPDATE tb_subjects_results
+        <set>
+            <if test="completetime != null">completetime=#{completetime},</if>
+            <if test="finalresultName != null">finalresult_name=#{finalresultName},</if>
+            <if test="finalresultShape != null">finalresult_shape=#{finalresultShape},</if>
+            <if test="principal != null">principal=#{principal}</if>
+        </set>
+        WHERE id=#{id} AND subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_results WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

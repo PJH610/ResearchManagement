@@ -1,0 +1,41 @@
+#parse('/subject/show/menu_include.html')
+<h3>研究工作进度列表</h3>
+<table>
+    <tr>
+        <th>序号</th>
+        <th>阶段研究开始时间</th>
+        <th>阶段研究结束时间</th>
+        <th>主要工作内容</th>
+        <th>阶段成果名称及形式</th>
+        <th>负责人</th>
+    </tr>
+    #foreach($schedule in $schedules)
+    <tr>
+        <td></td>
+        <td>$!dateTool.format('yyyy/MM/dd',$schedule.startTime)</td>
+        <td>$!dateTool.format('yyyy/MM/dd',$schedule.endTime)</td>
+        <td>$!schedule.content</td>
+        <td>$!schedule.name</td>
+        <td>$!schedule.host</td>
+    </tr>
+    #end
+</table>
+<h3>预期研究成果列表</h3>
+<table>
+    <tr>
+        <td>序号</td>
+        <th>完成时间</th>
+        <th>最终成果名称</th>
+        <th>最终成果形式</th>
+        <th>负责人</th>
+    </tr>
+    #foreach($result in $results)
+    <tr data-id="$!result.id">
+        <td>$!velocityCount</td>
+        <td>$!dateTool.format('yyyy/MM/dd',$result.completetime)</td>
+        <td>$!result.finalresultName</td>
+        <td>$!result.finalresultShape</td>
+        <td>$!result.principal</td>
+    </tr>
+    #end
+</table>

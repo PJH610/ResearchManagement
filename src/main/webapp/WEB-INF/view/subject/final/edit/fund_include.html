@@ -1,0 +1,53 @@
+#parse('/subject/final/edit/menu_include.html')
+<h3>课题经费信息</h3>
+<a data-url="/subject/$!subjectId/final/edit/fund/add" onclick="openPage(this)">添加</a>
+<table data-subject_id="$!subjectId">
+    <tr>
+        <th>年度</th>
+        <th>市教育局经费</th>
+        <th>其他经费</th>
+        <th>总计</th>
+        <th>操作</th>
+    </tr>
+    #foreach($fund in $funds.list)
+    <tr data-id="$!fund.id">
+        <td>$!dateTool.format('yyyy',$fund.year)</td>
+        <td>$!fund.fund</td>
+        <td>$!fund.otherFund</td>
+        <td>$!fund.totalFund</td>
+        <td>
+            <a data-url="/subject/$!subjectId/final/edit/fund/$!fund.id/update" onclick="openPage(this)">修改</a>
+            <a onclick="subjectFinalFundDelete(this)">删除</a>
+        </td>
+    </tr>
+    #end
+</table>
+<input type="button" value="上一步" data-url="/subject/$!subjectId/final/edit/achievement" onclick="openPage(this)">
+<input type="button" value="完成" data-url="/subject/final/list/host" onclick="openPage(this)">
+<script type="text/javascript">
+    function subjectFinalFundDelete(item) {
+        if (confirm("您确定提交吗？提交后将不能再修改！")) {
+            var tr = $(item).closest("tr");
+            $.ajax({
+                url: "/api/subject/final/fund/delete",
+                type: "post",
+                data: "subject_id=" + tr.closest("table").data("subject_id") + "&id=" + tr.data("id"),
+                dataType: "json",
+                cache: false,
+                beforeSend: function() {
+                },
+                complete: function() {
+                },
+                success: function (result) {
+                    if (result.code == 200) {
+                        tr.remove();
+                    } else {
+                        alert(result.msg);
+                    }
+                },error: function (result) {
+                    alert("网络连接出错！");
+                }
+            });
+        }
+    }
+</script>

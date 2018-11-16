@@ -1,0 +1,28 @@
+#parse('/subject/final/show/menu_include.html')
+<h3>研究成果</h3>
+<table>
+    <tr>
+        <td>最终研究成果名称及形式、内容摘要、成果价值分析：</td>
+        <td>$!subjectFinal.achievement</td>
+    </tr>
+    <tr>
+        <td>代表性阶段成果名称及内容摘要：</td>
+        <td>$!subjectFinal.content</td>
+    </tr>
+    <tr>
+        <td>成果发表、获奖、推广应用情况：</td>
+        <td>$!subjectFinal.situation</td>
+    </tr>
+    <tr>
+        <td>重要变更说明：</td>
+        <td>$!subjectFinal.changes</td>
+    </tr>
+    <tr>
+        <td>最终研究成果：</td>
+        <td>
+            #if($final.file)
+            <a href="$!subjectFinal.file.fileUri">$!subjectFinal.file.filename</a>
+            #end
+        </td>
+    </tr>
+</table>

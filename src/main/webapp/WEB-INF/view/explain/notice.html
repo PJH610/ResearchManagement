@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>通知接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/notice/add">/api/notice/add</a></p>
+        <p>描述：添加通知接口</p>
+        <p>参数: file(附件 可为空)，theme(主题，不为空) ，host(发布人（id），不为空)，content(内容，不为空)，top(置顶(true，false)，不为空)</p>
+        <form action="/api/notice/add" method="post"  enctype="multipart/form-data">
+            <table>
+            <tr>
+                <td>附件：</td>
+                <td><input type="file" name="file"/></td>
+            </tr>
+            <tr>
+                <td>主题：</td>
+                <td><input type="text" name="theme"/></td>
+            </tr>
+            <tr>
+                <td>发布：</td>
+                <td><input type="text" name="host"/></td>
+            </tr>
+            <tr>
+                <td>内容：</td>
+                <td><input type="text" name="content"/></td>
+            </tr>
+            <tr>
+                <td>置顶：</td>
+                <td><input type="text" name="top"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交"/></td>
+            </tr>
+        </table>
+        </form>
+    </li>
+    <li>
+        <p>GET：<a href="/api/notice/list">/api/notice/list</a></p>
+        <p>描述: 查看首页通知列表</p>
+        <p>参数：page_num(默认为第一页，可为空)，page_size(默认为10条数据，可为空) </p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/notice/show/{id}">/api/notice/show/{id}</a></p>
+        <p>描述: 查看通知列表内容</p>
+        <p>参数：id </p>
+    </li>
+    <li>
+        <P>POST：<a href="/api/notice/update">/api/notice/update</a></P>
+        <P>描述: 根据id修改内容参数</P>
+        <p>参数: id(主键 不为空)， file(附件 可为空)，theme(主题，不为空) ，host(发布人，不为空)，content(内容，不为空)，top(置顶(true，false)，不为空)</p>
+        <form action="/api/notice/update" method="post"  enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>附件：</td>
+                    <td><input type="file" name="file"/></td>
+                </tr>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td>主题：</td>
+                    <td><input type="text" name="theme"/></td>
+                </tr>
+                <tr>
+                    <td>发布：</td>
+                    <td><input type="text" name="host"/></td>
+                </tr>
+                <tr>
+                    <td>内容：</td>
+                    <td><input type="text" name="content"/></td>
+                </tr>
+                <tr>
+                    <td>置顶：</td>
+                    <td><input type="text" name="top"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>POST：<a href="/api/notice/delete">/api/notice/delete</a></p>
+        <p>描述: 根据传入批量id删除对应的批量通知</p>
+        <p>参数: id</p>
+        <form action="/api/notice/delete" method="post">
+            <table>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<h3>添加工作进度信息</h3>
+<form id="subject-schedule-add-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>阶段研究开始时间：</td>
+            <td><input type="date" name="start_time"></td>
+        </tr>
+        <tr>
+            <td>阶段研究结束时间：	</td>
+            <td><input type="date" name="end_time"></td>
+        </tr>
+        <tr>
+            <td>主要工作内容：</td>
+            <td><input type="text" autocomplete="off" name="content"></td>
+        </tr>
+        <tr>
+            <td>阶段名称及形式：	</td>
+            <td><input type="text" autocomplete="off" name="name"></td>
+        </tr>
+        <tr>
+            <td>负责人：</td>
+            <td><input type="text" autocomplete="off" name="host"></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="添加" onclick="SubjectScheduleAdd()">
+                <input type="button" value="返回" onclick="history.go(-1);">
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function SubjectScheduleAdd() {
+        var form = $("#subject-schedule-add-form");
+        $.ajax({
+            url: "/api/subject/schedule/add",
+            timeout: 5000, //超时时间设置，单位毫秒
+            type: "post",
+            data: form.serialize(),
+            dataType: "json",
+            cahce: false,
+            beforeSend: function() {
+                form.find("input").attr("disabled", true);
+            },
+            complete: function() {
+                form.find("input").removeAttr("disabled");
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/edit/schedule");
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

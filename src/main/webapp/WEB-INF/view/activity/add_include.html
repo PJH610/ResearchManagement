@@ -1,0 +1,59 @@
+<span>添加课题活动信息</span>
+<form id="activity-add-form">
+    <table>
+        <tr>
+            <td>主题：</td>
+            <td><input type="text" name="theme" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>课题：</td>
+            <td>
+                <input type="hidden" name="subject_id" value="">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($!subject in $!subjects)
+                    <option value="$!subject.id">$!subject.name</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>作者：</td>
+            <td><input type="text" name="author" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>时间：</td>
+            <td><input type="date" name="date" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>正文：</td>
+            <td><textarea type="text" name="content" autocomplete="off"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="提交" onclick="activityAdd()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function activityAdd() {
+        $.ajax({
+            url: "/api/activity/add",
+            type: "post",
+            data: $("#activity-add-form").serialize(),
+            dataType: "json",
+            cahce: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/activity/list/host");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

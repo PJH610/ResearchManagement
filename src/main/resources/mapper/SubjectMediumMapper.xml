@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectMediumDao">
+
+    <resultMap id="mediumResultMap" type="com.zhuoyue.researchManement.bean.SubjectMedium">
+        <id column="id" property="id" />
+        <result column="subject_id" property="subjectId" />
+        <result column="state" property="state" />
+        <result column="changes" property="changes" />
+        <result column="adjust" property="adjust" />
+        <result column="adjust_reason" property="adjustReason" />
+        <result column="funds" property="funds" />
+        <result column="supporting_funds" property="supportingFunds" />
+        <result column="used_funds" property="usedFunds" />
+        <result column="funds_detail" property="fundsDetail" />
+        <association property="file" column="file_id" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+        <association property="subject" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectDao.selectById" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuoyue.researchManement.bean.SubjectMedium">
+        INSERT INTO tb_subjects_medium(subject_id,state,changes,adjust,adjust_reason,situation,funds,supporting_funds,used_funds,funds_detail,file_id,school_note,school_leader_name,school_check_time,city_note,city_leader_name,city_check_time)
+        VALUES (#{subjectId},#{state},#{changes},#{adjust},#{adjustReason},#{situation},#{funds},#{supportingFunds},#{usedFunds},#{fundsDetail},#{file.id},#{schoolNote},#{schoolLeaderName},#{schoolCheckTime},#{cityNote},#{cityLeaderName},#{cityCheckTime})
+    </insert>
+
+    <select id="list" resultMap="mediumResultMap">
+        SELECT sm.* FROM (tb_subjects_medium sm INNER JOIN tb_subjects s ON sm.subject_id=s.id) INNER JOIN tb_users u on s.user_id=u.id
+        <where>
+            <if test="keyword != null">sm.name LIKE #{keyword}"%"</if>
+            <if test="states != null">
+                AND sm.state IN
+                <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userId != null">AND s.user_id=#{userId}</if>
+            <if test="unitIds != null">
+                AND u.unit_id IN
+                <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY sm.id DESC
+    </select>
+
+    <select id="selectById" resultMap="mediumResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_medium WHERE id=#{id}
+    </select>
+
+    <select id="selectBySubjectId" resultMap="mediumResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_medium WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectState" resultType="com.zhuoyue.researchManement.enums.SubjectMediumState" parameterType="java.lang.Long">
+        SELECT state FROM tb_subjects_medium WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId">
+        UPDATE (tb_subjects_medium sm INNER JOIN tb_subjects s ON sm.subject_id=s.id) INNER JOIN tb_users u on s.user_id=u.id
+        <set>
+            <if test="medium.state != null">sm.state=#{medium.state},</if>
+            <if test="medium.changes != null">sm.changes=#{medium.changes},</if>
+            <if test="medium.adjust != null">sm.adjust=#{medium.adjust},</if>
+            <if test="medium.adjustReason != null">sm.adjust_reason=#{medium.adjustReason},</if>
+            <if test="medium.situation != null">sm.situation=#{medium.situation},</if>
+            <if test="medium.funds != null">sm.funds=#{medium.funds},</if>
+            <if test="medium.supportingFunds != null">sm.supporting_funds=#{medium.supportingFunds},</if>
+            <if test="medium.usedFunds != null">sm.used_funds=#{medium.usedFunds},</if>
+            <if test="medium.fundsDetail != null">sm.funds_detail=#{medium.fundsDetail},</if>
+            <if test="medium.file != null and medium.file.id != null">sm.file_id=#{medium.file.id},</if>
+
+            <if test="medium.schoolNote != null">sm.school_note=#{medium.schoolNote},</if>
+            <if test="medium.schoolLeaderName != null">sm.school_leader_name=#{medium.schoolLeaderName},</if>
+            <if test="medium.schoolCheckTime != null">sm.school_check_time=#{medium.schoolCheckTime},</if>
+            <if test="medium.cityNote != null">sm.city_note=#{medium.cityNote},</if>
+            <if test="medium.cityLeaderName != null">sm.city_leader_name=#{medium.cityLeaderName},</if>
+            <if test="medium.cityCheckTime != null">sm.city_check_time=#{medium.cityCheckTime},</if>
+        </set>
+        WHERE sm.subject_id=#{medium.subjectId}
+        <if test="userId != null"> AND s.user_id=#{userId}</if>
+        <if test="states != null">
+            AND sm.state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="unitIds != null">
+            AND u.unit_id IN
+            <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_medium WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

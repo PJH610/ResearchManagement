@@ -1,0 +1,108 @@
+#parse('/subject/edit/menu_include.html')
+<h3>经费预算</h3>
+<form id="subject-fund-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>资料费：</td>
+            <td><input type="text" autocomplete="off" name="data" value="$!fund.data"></td>
+        </tr>
+        <tr>
+            <td>国内调研差旅费：</td>
+            <td><input type="text" autocomplete="off" name="travel" value="$!fund.travel"></td>
+        </tr>
+        <tr>
+            <td>会议费：</td>
+            <td><input type="text" autocomplete="off" name="meeting" value="$!fund.meeting"></td>
+        </tr>
+        <tr>
+            <td>设备、耗材费：</td>
+            <td><input type="text" autocomplete="off" name="equipment" value="$!fund.equipment"></td>
+        </tr>
+        <tr>
+            <td>劳务及咨询费：</td>
+            <td><input type="text" autocomplete="off" name="service" value="$!fund.service"></td>
+        </tr>
+        <tr>
+            <td>成果出版及印刷费：</td>
+            <td><input type="text" autocomplete="off" name="print" value="$!fund.print"></td>
+        </tr>
+        <tr>
+            <td>结题鉴定费：</td>
+            <td><input type="text" autocomplete="off" name="identification" value="$!fund.identification"></td>
+        </tr>
+        <tr>
+            <td>其它：</td>
+            <td><input type="text" autocomplete="off" name="other" value="$!fund.other"></td>
+        </tr>
+        <tr>
+            <td>申请资助经费（元）：</td>
+            <td><input type="text" autocomplete="off" name="funding" value="$!fund.funding"></td>
+        </tr>
+        <tr>
+            <td>自筹经费（元）：</td>
+            <td><input type="text" autocomplete="off" name="selfraised" value="$!fund.selfraised"></td>
+        </tr>
+        <tr>
+            <td>经费合计（元）：</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>经费年度预算（元）：</td>
+            <td>
+                <table>
+                    <tr>
+                        <td><input type="text" name="budgets_year" value="#if($fund.budgets and $fund.budgets.size() > 0)$!dateTool.format('yyyy',$fund.budgets[0].year)#end">年</td>
+                        <td><input type="text" name="budgets_money" value="#if($fund.budgets and $fund.budgets.size() > 0)$!fund.budgets[0].money#end"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="budgets_year" value="#if($fund.budgets and $fund.budgets.size() > 1)$!dateTool.format('yyyy',$fund.budgets[1].year)#end">年</td>
+                        <td><input type="text" name="budgets_money" value="#if($fund.budgets and $fund.budgets.size() > 1)$!fund.budgets[1].money#end"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="budgets_year" value="#if($fund.budgets and $fund.budgets.size() > 2)$!dateTool.format('yyyy',$fund.budgets[2].year)#end">年</td>
+                        <td><input type="text" name="budgets_money" value="#if($fund.budgets and $fund.budgets.size() > 2)$!fund.budgets[2].money#end"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="budgets_year" value="#if($fund.budgets and $fund.budgets.size() > 3)$!dateTool.format('yyyy',$fund.budgets[3].year)#end">年</td>
+                        <td><input type="text" name="budgets_money" value="#if($fund.budgets and $fund.budgets.size() > 3)$!fund.budgets[3].money#end"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="budgets_year" value="#if($fund.budgets and $fund.budgets.size() > 4)$!dateTool.format('yyyy',$fund.budgets[4].year)#end">年</td>
+                        <td><input type="text" name="budgets_money" value="#if($fund.budgets and $fund.budgets.size() > 4)$!fund.budgets[4].money#end"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="上一步" onclick="subjectFundUpdate('/subject/$!subjectId/edit/result')">
+<input type="button" value="完成" onclick="subjectFundUpdate('/subject/host')">
+<script type="text/javascript">
+    function subjectFundUpdate(skipUrl) {
+        $.ajax({
+            url: "/api/subject/fund/update",
+            type: "post",
+            data: $("#subject-fund-update-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    if (skipUrl) {
+                        openUrl(skipUrl);
+                    } else {
+                        alert(result.msg);
+                    }
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

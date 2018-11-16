@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>预期研究成果说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/subject/result/add">/api/subject/result/add</a></p>
+        <p>描述：添加预期研究成果接口</p>
+        <p>参数：subject_id(课题，关联课题表)，completetime(完成时间，格式为"yyyy-MM-dd")，finalresult_name(最终成果名称)，
+            finalresult_shape(最终成果形式)，principal(负责人)
+        </p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/result/list">/api/subject/result/list</a></p>
+        <p>描述：查询预期研究成果</p>
+        <p>参数：subject_id(课题，关联课题表)</p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/result/show/{id}">/api/subject/result/show/{id}</a></p>
+        <p>描述：根据id查询预期研究成果</p>
+        <p>参数：id </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/result/update">/api/subject/result/update</a></p>
+        <p>描述：根据id修改预期研究成果</p>
+        <p>参数：subject_id(课题，关联课题表)，id(主键)，completetime(完成时间，输入格式为"yyyy-MM-dd"，可为空)，finalresult_name(最终成果名称，可为空)
+                 finalresult_shape(最终成果形式，可为空)，principal(负责人，可为空)
+        </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/result/delete">/api/subject/result/delete</a></p>
+        <p>描述：根据id修改预期研究成果(可批量删除)</p>
+        <p>参数：subject_id(课题，关联课题表)，id(主键)</p>
+    </li>
+</ul>
+</body>
+</html>

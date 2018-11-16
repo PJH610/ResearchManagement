@@ -1,0 +1,58 @@
+<h3>结题验收申请书列表</h3>
+<table id="subject-final-list-table"></table>
+<div id="subject-final-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectFinalList($pageNum);
+    });
+
+    var subjectFinalListXhr;
+    function getSubjectFinalList(pageNum) {
+        if (subjectFinalListXhr) subjectFinalListXhr.abort();
+        subjectFinalListXhr = $.ajax({
+            url: "/api/subject/final/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr>'
+                            + '<td>' + list[x].subject.name + '</td>'
+                            + '<td>' + list[x].subject.user.realname + '</td>'
+                            + '<td>' + list[x].subject.year + '</td>'
+                            + '<td>' + list[x].subject.classification.desc + '</td>'
+                            + '<td>' + list[x].subject.project_reference + '</td>'
+                            + '<td>'
+                            + '<a data-url="/subject/' + list[x].subject_id + '/final/show" onclick="openPage(this)">查看</a>'
+                            + '<a data-url="/subject/' + list[x].subject_id + '/final/check/school" onclick="openPage(this)">点评</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>支持人</th>'
+                        + '<th>年度</th>'
+                        + '<th>学科</th>'
+                        + '<th>立项文号</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#subject-final-list-table").html(headTr + tr);
+
+                    initPage($("#subject-final-list-page"), data, getSubjectFinalList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+</script>

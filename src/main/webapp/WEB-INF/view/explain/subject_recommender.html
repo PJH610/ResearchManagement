@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>课题推荐人接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>GET：<a href="/api/subject/recommender/show/{subject_id}">/api/subject/recommender/show/{subject_id}</a></p>
+        <p>描述：根据id查询课题推荐人</p>
+        <p>参数：subject_id(课题id)</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/recommender/update">/api/subject/recommender/update</a></p>
+        <p>描述：根据id修改课题推荐人</p>
+        <p>参数：subject_id(课题id)，name(推荐人一姓名，可为空)，position(职务，可为空)，
+            profession(专业，可为空)，unit(工作单位，可为空)，subname(主持过的课题名称，可为空)，recommend(推荐意见，可为空),
+            name_s(推荐人二姓名，可为空)，position_s(职务，可为空)，
+            profession_s(专业，可为空)，unit_s(工作单位，可为空)，subname_s(主持过的课题名称，可为空)，recommend_s(推荐意见，可为空)
+        </p>
+    </li>
+</ul>
+</body>
+</html>

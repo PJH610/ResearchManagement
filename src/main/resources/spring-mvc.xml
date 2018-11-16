@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.1.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	
+	<!--启动注解驱动的Spring MVC功能，注册请求url和注解POJO类方法的映射-->
+	
+	<mvc:annotation-driven conversion-service="conversionService">
+		<!--处理请求返回json字符串的中文乱码问题 -->
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/html;charset=UTF-8"/>
+			</bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper">
+					<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+						<property name="serializationInclusion">
+							<value type="com.fasterxml.jackson.annotation.JsonInclude$Include">NON_NULL</value>
+						</property>
+						<property name="propertyNamingStrategy">
+							<bean class="com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy"/>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 枚举类型自动绑定 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="com.zhuoyue.researchManement.convert.StringToSubjectClassification" />
+				<bean class="com.zhuoyue.researchManement.convert.StringtoSubjectCategory" />
+				<bean class="com.zhuoyue.researchManement.convert.StringToFinancialcategoryConvert" />
+				<bean class="com.zhuoyue.researchManement.convert.StringToSubjectState" />
+				<bean class="com.zhuoyue.researchManement.convert.StringtoSubjectSpecialistType" />
+				<bean class="com.zhuoyue.researchManement.convert.StringToSubjectFinalType" />
+				<bean class="com.zhuoyue.researchManement.convert.StringtoSubjectChangeType" />
+			</set>
+		</property>
+	</bean>
+	
+	<!-- 启动包扫描功能，以便注册带有@Controllers、@service、@repository、@Component等注解的类成为spring的bean -->
+	<context:component-scan base-package="com.zhuoyue.researchManement.controller"/>
+
+	<!-- 视图模式配置,velocity配置文件-->
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="/WEB-INF/view" />
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置后缀 -->
+	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="suffix" value=".html" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="dateToolAttribute">
+			<value>dateTool</value>
+		</property>
+		<property name="numberToolAttribute">
+			<value>numberTool</value>
+		</property>
+	</bean>
+	
+	<!-- 访问静态文件（jpg,js,css）的方法 -->
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<!--<mvc:resources location="/styles/" mapping="/styles/**" />-->
+	<!--<mvc:resources location="/Views/" mapping="/Views/**" />-->
+	
+	<!-- 配置文件上传，如果没有使用文件上传可以不用配置，当然如果不配，那么配置文件中也不必引入上传组件包 -->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
+		<property name="defaultEncoding" value="utf-8"/>
+		<!-- 文件大小最大值 -->
+		<property name="maxUploadSize" value="400000000"/>
+		<!-- 内存中的最大值 -->
+		<property name="maxInMemorySize" value="40960"/>
+	</bean>
+	
+	<!-- AOP 注解方式 ；定义Aspect -->
+	<!-- 激活组件扫描功能,在包"com.example.aop及其子包下面自动扫描通过注解配置的组件-->
+	<context:component-scan base-package="com.zhuoyue.researchManement.aop"/>
+	<!-- 启动AspectJ支持   只对扫描过的bean有效-->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<!-- Shiro生命周期处理器 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- 开启shiro注解 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+</beans>

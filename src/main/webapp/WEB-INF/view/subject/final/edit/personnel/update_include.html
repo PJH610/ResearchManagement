@@ -1,0 +1,56 @@
+<h3>修改课题研究人员信息</h3>
+<form id="subject-final-personnel-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <input type="hidden" name="id" value="$!finalPersonnel.id">
+    <table>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" name="name" value="$!personnel.name"></td>
+        </tr>
+        <tr>
+            <td>年龄：</td>
+            <td><input type="text" name="age" value="$!personnel.age"></td>
+        </tr>
+        <tr>
+            <td>单位：</td>
+            <td><input type="text" name="unit" value="$!personnel.unit"></td>
+        </tr>
+        <tr>
+            <td>课题所承担工作：</td>
+            <td><input type="text" name="task" value="$!personnel.task"></td>
+        </tr>
+        <tr>
+            <td>职务/职称：</td>
+            <td><input type="text" name="position" value="$!personnel.position"></td>
+        </tr>
+        <tr>
+            <td>学历/学位：</td>
+            <td><input type="text" name="education" value="$!personnel.education"></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectFinalPersonnalUpdate()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectFinalPersonnalUpdate() {
+        $.ajax({
+            url: "/api/subject/final/personnel/update",
+            type: "post",
+            data: $("#subject-final-personnel-update-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    history.go(-1);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

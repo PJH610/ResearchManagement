@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectRecommenderDao">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.zhuoyue.researchManement.bean.SubjectRecommender" >
+        INSERT INTO tb_subjects_recommender(subject_id,name,position,profession,unit,subname,recommend,name_s,position_s,profession_s,unit_s,subname_s,recommend_s)
+        VALUES (#{subjectId},#{name},#{position},#{profession},#{unit},#{subname},#{recommend},#{nameS},#{positionS},#{professionS},#{unitS},#{subnameS},#{recommendS})
+    </insert>
+
+    <select id="list" resultType="com.zhuoyue.researchManement.bean.SubjectRecommender" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_recommender
+    </select>
+
+    <select id="selectById" resultType="com.zhuoyue.researchManement.bean.SubjectRecommender" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_recommender WHERE id=#{id}
+    </select>
+
+    <select id="selectBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectRecommender" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_recommender WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId" parameterType="com.zhuoyue.researchManement.bean.SubjectRecommender">
+        UPDATE tb_subjects_recommender
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="position != null">position=#{position},</if>
+            <if test="profession != null">profession=#{profession},</if>
+            <if test="unit != null">unit=#{unit},</if>
+            <if test="subname != null">subname=#{subname},</if>
+            <if test="recommend != null">recommend=#{recommend},</if>
+            <if test="nameS != null">name_s=#{nameS},</if>
+            <if test="positionS != null">position_s=#{positionS},</if>
+            <if test="professionS != null">profession_s=#{professionS},</if>
+            <if test="unitS != null">unit_s=#{unitS},</if>
+            <if test="subnameS != null">subname_s=#{subnameS},</if>
+            <if test="recommendS != null">recommend_s=#{recommendS}</if>
+        </set>
+        WHERE subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_recommender WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

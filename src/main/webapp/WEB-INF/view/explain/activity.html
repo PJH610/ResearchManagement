@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>活动接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/activity/add">/api/activity/add</a></p>
+        <p>描述：添加活动接口</p>
+        <p>参数: theme(主题) ，subject_id(课题，关联课题id)，author(作者)，date(时间，格式：'yyyy-MM-dd')，content(内容)</p>
+        <form action="/api/activity/add" method="post">
+            <table>
+                <tr>
+                    <td>主题：</td>
+                    <td><input type="text" name="theme"/></td>
+                </tr>
+                <tr>
+                    <td>课题：</td>
+                    <td><input type="text" name="subject_id"/></td>
+                </tr>
+                <tr>
+                    <td>作者：</td>
+                    <td><input type="text" name="author"/></td>
+                </tr>
+                <tr>
+                    <td>时间：</td>
+                    <td><input type="text" name="date"/></td>
+                </tr>
+                <tr>
+                    <td>内容：</td>
+                    <td><input type="text" name="content"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>GET：<a href="/api/activity/list">/api/activity/list</a></p>
+        <p>描述: 查看首页活动列表</p>
+        <p>参数：page_num(默认为第一页，可为空)，page_size(默认为10条数据，可为空) </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/activity/show/{id}">/api/activity/show/{id}</a></p>
+        <p>描述: 查看活动列表内容</p>
+        <p>参数：id </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/activity/update">/api/activity/update</a></p>
+        <p>描述: 根据id修改内容参数</p>
+        <p>参数: id(主键)，theme(主题，可为空)，author(作者，可为空)，date(时间，可为空)，content(内容，可为空)</p>
+        <form action="/api/activity/update" method="post">
+            <table>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td>主题：</td>
+                    <td><input type="text" name="theme"/></td>
+                </tr>
+                <tr>
+                    <td>作者：</td>
+                    <td><input type="text" name="author"/></td>
+                </tr>
+                <tr>
+                    <td>时间：</td>
+                    <td><input type="text" name="date"/></td>
+                </tr>
+                <tr>
+                    <td>内容：</td>
+                    <td><input type="text" name="content"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <p>POST：<a href="/api/activity/check">/api/activity/check</a></p>
+    <p>描述: 根据id修改内容参数</p>
+    <p>参数: id(主键 不为空)，activityState(状态 (true，false))</p>
+    <form action="/api/activity/check" method="post">
+        <table>
+            <tr>
+                <td>id：</td>
+                <td><input type="text" name="id"/></td>
+            </tr>
+            <tr>
+                <td>pass：</td>
+                <td><input type="text" name="pass"/></td>
+            </tr>
+            <tr>
+                <td>状态：</td>
+                <td><input type="text" name="activityState"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交"/></td>
+            </tr>
+        </table>
+    </form>
+    </li>
+    <li>
+        <p>POST：<a href="/api/activity/delete">/api/activity/delete</a></p>
+        <p>描述: 根据传入批量id删除对应的批量通知</p>
+        <p>参数: id</p>
+        <form action="/api/activity/delete" method="post">
+            <table>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

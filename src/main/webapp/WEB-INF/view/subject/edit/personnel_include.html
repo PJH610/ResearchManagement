@@ -1,0 +1,56 @@
+#parse('/subject/edit/menu_include.html')
+<h3>课题研究人员列表</h3>
+<a data-url="/subject/$!subjectId/edit/personnel/add" onclick="openPage(this)">添加</a>
+<table data-subject_id="$!subjectId">
+    <tr>
+        <th>姓名</th>
+        <th>单位</th>
+        <th>年龄</th>
+        <th>职务/职称</th>
+        <th>学历/学位</th>
+        <th>任务分工</th>
+        <th>操作</th>
+    </tr>
+#foreach($personnel in $personnels)
+    <tr data-id="$!personnel.id">
+        <td>$!personnel.name</td>
+        <td>$!personnel.unit</td>
+        <td>$!personnel.age</td>
+        <td>$!personnel.position</td>
+        <td>$!personnel.education</td>
+        <td>$!personnel.task</td>
+        <td>
+            <a data-url="/subject/$!subjectId/edit/personnel/$!personnel.id/update" onclick="openPage(this)">修改</a>
+            <a onclick="subjectPersonnalDelete(this)">删除</a>
+        </td>
+    </tr>
+#end
+</table>
+<input type="button" value="返回" data-url="/subject/host" onclick="openPage(this)">
+<input type="button" value="上一步" data-url="/subject/$!subjectId/edit/main" onclick="openPage(this)">
+<input type="button" value="下一步" data-url="/subject/$!subjectId/edit/recommender" onclick="openPage(this)">
+<script type="text/javascript">
+    function subjectPersonnalDelete(item) {
+        var tr = $(item).closest("tr");
+        $.ajax({
+            url: "/api/subject/personnel/delete",
+            type: "post",
+            data: "subject_id=" + tr.closest("table").data("subject_id") + "&id=" + tr.data("id"),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    tr.remove();
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

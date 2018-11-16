@@ -1,0 +1,32 @@
+#parse('/subject/show/menu_include.html')
+<h3>课题论证设计</h3>
+<table>
+    <tr>
+        <td>学科类别：</td>
+        <td>$!proof.subjectClassification.desc</td>
+    </tr>
+    <tr>
+        <td>课题名称：</td>
+        <td>$!proof.subjectName</td>
+    </tr>
+    <tr>
+        <td>(一)本课题核心概念界定，国内外研究现状述评，选题意义及研究价值。</td>
+        <td>$!proof.value</td>
+    </tr>
+    <tr>
+        <td>(二)本课题的研究目标、研究内容、研究假设和创新点。</td>
+        <td>$!proof.target</td>
+    </tr>
+    <tr>
+        <td>(三)本课题的研究思路、研究方法、技术路线和实施步骤。</td>
+        <td>$!proof.method</td>
+    </tr>
+    <tr>
+        <td>附加论证材料：</td>
+        <td>
+            #if($proof.file)
+            <a href="$!proof.file.fileUri" target="_blank">$!proof.file.filename</a>
+            #end
+        </td>
+    </tr>
+</table>

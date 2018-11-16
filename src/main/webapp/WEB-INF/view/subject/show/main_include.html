@@ -1,0 +1,151 @@
+#parse('/subject/show/menu_include.html')
+<h3>课题基本信息</h3>
+<form id="subject-update-form">
+    <input type="hidden" name="id" value="$!subject.id">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!subject.name</td>
+        </tr>
+        <tr>
+            <td>申报课题类别：</td>
+            <td>$subject.category.desc</td>
+        </tr>
+        <tr>
+            <td>学科分类：</td>
+            <td>$subject.classification.desc</td>
+        </tr>
+        <tr>
+            <td>负责人姓名：</td>
+            <td>$!subject.user.realname</td>
+        </tr>
+        <tr>
+            <td>性别：</td>
+            <td>$!subject.user.gender.desc</td>
+        </tr>
+        <tr>
+            <td>民族：</td>
+            <td>$!subject.user.ethnic</td>
+        </tr>
+        <tr>
+            <td>出生年月：</td>
+            <td>$!dateTool.format('yyyy年MM月dd日',$!subject.user.birthday)</td>
+        </tr>
+        <tr>
+            <td>行政职务：</td>
+            <td>$!subject.user.position</td>
+        </tr>
+        <tr>
+            <td>专业技术职务：</td>
+            <td>$!subject.user.professionalTitle</td>
+        </tr>
+        <tr>
+            <td>学科专长：</td>
+            <td>$!subject.user.profession</td>
+        </tr>
+        <tr>
+            <td>最后学历：</td>
+            <td>$!subject.user.education</td>
+        </tr>
+        <tr>
+            <td>最后学位：</td>
+            <td>$!subject.user.degree</td>
+        </tr>
+        <tr>
+            <td>手机号码：</td>
+            <td>$!subject.user.phone</td>
+        </tr>
+        <tr>
+            <td>工作单位：</td>
+            <td>$!subject.user.unit.name</td>
+        </tr>
+        <tr>
+            <td>办公电话：</td>
+            <td>$!subject.user.telephone</td>
+        </tr>
+        <tr>
+            <td>单位传真：</td>
+            <td>$!subject.user.fax</td>
+        </tr>
+        <tr>
+            <td>通讯地址：</td>
+            <td>$!subject.user.address</td>
+        </tr>
+        <tr>
+            <td>邮编：</td>
+            <td>$!subject.user.postcode</td>
+        </tr>
+        <tr>
+            <td>电子邮件：</td>
+            <td>$!subject.user.email</td>
+        </tr>
+    </table>
+    <h3>课题研究人员列表</h3>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>单位</th>
+            <th>年龄</th>
+            <th>职务/职称</th>
+            <th>学历/学位</th>
+            <th>任务分工</th>
+        </tr>
+        #foreach($personnel in $personnels)
+        <tr>
+            <td>$!personnel.name</td>
+            <td>$!personnel.unit</td>
+            <td>$!personnel.age</td>
+            <td>$!personnel.position</td>
+            <td>$!personnel.education</td>
+            <td>$!personnel.task</td>
+        </tr>
+        #end
+    </table>
+    <h3>课题基本信息</h3>
+    <table>
+        <tr>
+            <td>预期最终成果：</td>
+            <td>$!subject.finalresult</td>
+        </tr>
+        <tr>
+            <td>申请资助经费(元)：</td>
+            <td>$!subject.grants</td>
+        </tr>
+        <tr>
+            <td>预计完成时间：</td>
+            <td>$!dateTool.format('yyyy年MM月dd日',$!subject.completeTime)</td>
+        </tr>
+        <tr>
+            <td>经费类别：</td>
+            <td>$subject.financialcategory.desc</td>
+        </tr>
+        <tr>
+            <td>开户银行及单位国库支付中心账号(B类免填)：</td>
+            <td>$!subject.bankcard</td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function subjectUpdate() {
+        $.ajax({
+            url: "/api/subject/update",
+            type: "post",
+            data: $("#subject-update-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                } else {
+
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

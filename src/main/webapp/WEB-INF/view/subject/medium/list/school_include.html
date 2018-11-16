@@ -1,0 +1,58 @@
+<h3>中期自评报告列表</h3>
+<table id="subject-medium-list-table"></table>
+<div id="subject-medium-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectMediumList($pageNum);
+    });
+
+    var meduimListXhr;
+    function getSubjectMediumList(pageNum) {
+        if (meduimListXhr) meduimListXhr.abort();
+        meduimListXhr = $.ajax({
+            url: "/api/subject/medium/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].subject.name + '</td>'
+                            + '<td>' + list[x].subject.user.realname + '</td>'
+                            + '<td>' + list[x].subject.year + '</td>'
+                            + '<td>' + list[x].subject.classification.desc + '</td>'
+                            + '<td>' + list[x].subject.project_reference + '</td>'
+                            + '<td class="operate">'
+                            + '<a data-url="/subject/' + list[x].subject_id + '/medium/show" onclick="openPage(this)">查看</a>'
+                            + '<a data-url="/subject/' + list[x].subject_id + '/medium/check/school" onclick="openPage(this)">点评</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>支持人</th>'
+                        + '<th>年度</th>'
+                        + '<th>学科</th>'
+                        + '<th>立项文号</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#subject-medium-list-table").html(headTr + tr);
+
+                    initPage($("#subject-medium-list-page"), data, getSubjectMediumList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+</script>

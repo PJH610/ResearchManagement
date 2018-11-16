@@ -1,0 +1,72 @@
+<h3>指派专家指导小组成员</h3>
+<form id="subject-appoint-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!approval.subject.name</td>
+        </tr>
+        <tr>
+            <td>专家名单</td>
+            <td>
+                <table id="expert-list-table">
+                    <tr>
+                        <th>选择</th>
+                        <th>姓名</th>
+                        <th>单位</th>
+                        <th>职称</th>
+                        <th>研究专长</th>
+                    </tr>
+                    #foreach($expert in $experts)
+                    <tr data-id="$!expert.id">
+                        <td><input type="checkbox" name="expert_id" value="$!expert.id"></td>
+                        <td>$!expert.realname</td>
+                        <td>$!expert.unit.name</td>
+                        <td>$!expert.professionalTitle</td>
+                        <td>$!expert.profession</td>
+                    </tr>
+                    #end
+                    <tr>
+                        <td colspan="5">
+                            <input type="button" value="全选" onclick="selectAll(true)">
+                            <input type="button" value="全不选" onclick="selectAll(false)">
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="提交" onclick="subjectAppoint()">
+                <input type="button" value="返回" onclick="history.go(-1);">
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function subjectAppoint() {
+        $.ajax({
+            url: "/api/subject/appoint",
+            type: "post",
+            data: $("#subject-appoint-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/list/city");
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+
+    function selectAll(checked) {
+        $("#expert-list-table").find("input[type=checkbox]").prop("checked", checked);
+    }
+</script>

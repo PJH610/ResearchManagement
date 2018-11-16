@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectDao">
+    <resultMap id="subjectResultMap" type="com.zhuoyue.researchManement.bean.Subject">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="user_id" property="userId" />
+        <result column="year" property="year"/>
+        <result column="classification" property="classification"/>
+        <result column="category" property="category"/>
+        <result column="finalresult" property="finalresult"/>
+        <result column="grants" property="grants"/>
+        <result column="financialcategory" property="financialcategory"/>
+        <result column="complete_time" property="completeTime"/>
+        <result column="bankcard" property="bankcard"/>
+        <result column="bankcard" property="bankcard"/>
+        <result column="medium_report" property="mediumReport"/>
+        <result column="final_report" property="finalReport"/>
+        <result column="project_number" property="projectNumber"/>
+        <result column="project_reference" property="projectReference"/>
+        <result column="conclusion_number" property="conclusionNumber"/>
+        <result column="subject_classification" property="subjectClassification"/>
+        <association property="user" column="user_id" select="com.zhuoyue.researchManement.dao.UserDao.selectById" />
+        <association property="thesisProposal" column="thesis_proposal_id" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+        <association property="mediumReportState" column="id" select="com.zhuoyue.researchManement.dao.SubjectMediumDao.selectState" />
+        <association property="finalReportState" column="id" select="com.zhuoyue.researchManement.dao.SubjectFinalDao.selectState" />
+    </resultMap>
+
+    <resultMap id="subjectResultMapWithSpecialists" type="com.zhuoyue.researchManement.bean.Subject">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="user_id" property="userId" />
+        <result column="year" property="year"/>
+        <result column="classification" property="classification"/>
+        <result column="category" property="category"/>
+        <result column="finalresult" property="finalresult"/>
+        <result column="grants" property="grants"/>
+        <result column="financialcategory" property="financialcategory"/>
+        <result column="complete_time" property="completeTime"/>
+        <result column="bankcard" property="bankcard"/>
+        <result column="bankcard" property="bankcard"/>
+        <result column="medium_report" property="mediumReport"/>
+        <result column="final_report" property="finalReport"/>
+        <result column="project_number" property="projectNumber"/>
+        <result column="project_reference" property="projectReference"/>
+        <result column="conclusion_number" property="conclusionNumber"/>
+        <result column="subject_classification" property="subjectClassification"/>
+        <association property="user" column="user_id" select="com.zhuoyue.researchManement.dao.UserDao.selectById" />
+        <association property="thesisProposal" column="thesis_proposal_id" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+        <association property="mediumReportState" column="id" select="com.zhuoyue.researchManement.dao.SubjectMediumDao.selectState" />
+        <association property="finalReportState" column="id" select="com.zhuoyue.researchManement.dao.SubjectFinalDao.selectState" />
+        <collection property="specialists" column="id" select="com.zhuoyue.researchManement.dao.SubjectSpecialistDao.listApproval" />
+    </resultMap>
+
+    <resultMap id="subjectResultMapDetail" type="com.zhuoyue.researchManement.bean.Subject">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="user_id" property="userId" />
+        <result column="year" property="year"/>
+        <result column="classification" property="classification"/>
+        <result column="category" property="category"/>
+        <result column="finalresult" property="finalresult"/>
+        <result column="grants" property="grants"/>
+        <result column="financialcategory" property="financialcategory"/>
+        <result column="complete_time" property="completeTime"/>
+        <result column="bankcard" property="bankcard"/>
+        <result column="bankcard" property="bankcard"/>
+        <result column="medium_report" property="mediumReport"/>
+        <result column="final_report" property="finalReport"/>
+        <result column="project_number" property="projectNumber"/>
+        <result column="project_reference" property="projectReference"/>
+        <result column="conclusion_number" property="conclusionNumber"/>
+        <result column="subject_classification" property="subjectClassification"/>
+        <association property="user" column="user_id" select="com.zhuoyue.researchManement.dao.UserDao.selectById" />
+        <association property="thesisProposal" column="thesis_proposal_id" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+        <association property="mediumReportId" column="id" select="com.zhuoyue.researchManement.dao.SubjectMediumDao.selectId" />
+        <association property="finalReportId" column="id" select="com.zhuoyue.researchManement.dao.SubjectFinalDao.selectId" />
+        <association property="approval" column="id" select="com.zhuoyue.researchManement.dao.SubjectApprovalDao.selectBySubjectIdWithSpecialists" />
+        <association property="recommender" column="id" select="com.zhuoyue.researchManement.dao.SubjectRecommenderDao.selectBySubjectId" />
+        <association property="proof" column="id" select="com.zhuoyue.researchManement.dao.SubjectProofDao.selectBySubjectId" />
+        <association property="feasibility" column="id" select="com.zhuoyue.researchManement.dao.SubjectFeasibilityDao.selectBySubjectId" />
+        <association property="fund" column="id" select="com.zhuoyue.researchManement.dao.SubjectFundDao.selectBySubjectId" />
+        <collection property="personnel" column="id" select="com.zhuoyue.researchManement.dao.SubjectPersonnelDao.listBySubjectId" />
+        <collection property="schedule" column="id" select="com.zhuoyue.researchManement.dao.SubjectScheduleDao.listBySubjectId" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuoyue.researchManement.bean.Subject">
+        INSERT INTO tb_subjects(name,classification,category,state,user_id,year,finalresult,grants,complete_time,financialcategory,
+                                bankcard,thesis_proposal_id,project_number,project_reference,conclusion_number,subject_classification)
+        VALUES (#{name},#{classification},#{category},#{state},#{userId},#{year},#{finalresult},#{grants},#{completeTime},
+                        #{financialcategory},#{bankcard},#{thesisProposal.id},#{projectNumber},#{projectReference},#{conclusionNumber},#{subjectClassification})
+    </insert>
+
+    <select id="list" resultMap="subjectResultMap">
+        SELECT s.* FROM tb_subjects s
+        <if test="unitIds != null">INNER JOIN tb_users u ON s.user_id=u.id</if>
+        <where>
+            <if test="userId != null">AND s.user_id=#{userId}</if>
+            <if test="keyword != null">AND s.name LIKE #{keyword}"%"</if>
+            <if test="states != null">
+                AND s.state IN
+                <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="unitIds != null">
+                AND u.unit_id IN
+                <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.id DESC
+    </select>
+
+    <select id="listWithSpecialists" resultMap="subjectResultMapWithSpecialists">
+        SELECT s.* FROM tb_subjects s
+        <if test="unitIds != null">INNER JOIN tb_users u ON s.user_id=u.id</if>
+        <where>
+            <if test="userId != null">AND s.user_id=#{userId}</if>
+            <if test="keyword != null">AND s.name LIKE #{keyword}"%"</if>
+            <if test="states != null">
+                AND s.state IN
+                <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="unitIds != null">
+                AND u.unit_id IN
+                <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.id DESC
+    </select>
+
+    <select id="listChange" resultMap="subjectResultMap">
+        SELECT s.* FROM tb_subjects s LEFT JOIN research.tb_subjects_medium sm ON s.id=sm.subject_id LEFT JOIN tb_subjects_final sf ON s.id=sf.subject_id
+        <if test="unitIds != null">INNER JOIN tb_users u ON s.user_id=u.id</if>
+        <where>
+            sm.id IS NOT NULL AND (sf.id IS NULL OR sf.state!=7)
+            <if test="keyword != null">AND s.name LIKE #{keyword}"%"</if>
+            <if test="userId != null">AND s.user_id=#{userId}</if>
+            <if test="unitIds != null">
+                AND u.unit_id IN
+                <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.id DESC
+    </select>
+
+    <select id="listASubjectWithName" resultType="com.zhuoyue.researchManement.bean.Subject" parameterType="java.lang.Long">
+        SELECT id,name FROM tb_subjects WHERE user_id=#{userId} AND state=6 ORDER BY id DESC
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="subjectResultMap">
+        SELECT *FROM tb_subjects WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.Subject">
+        UPDATE tb_subjects s
+        <if test="unitIds != null">INNER JOIN tb_users u on s.user_id=u.id</if>
+        <set>
+            <if test="subject.name != null">s.name=#{subject.name},</if>
+            <if test="subject.classification != null">s.classification=#{subject.classification},</if>
+            <if test="subject.category != null">s.category=#{subject.category},</if>
+            <if test="subject.state != null">s.state=#{subject.state},</if>
+            <if test="subject.year != null">s.year=#{subject.year},</if>
+            <if test="subject.finalresult != null">s.finalresult=#{subject.finalresult},</if>
+            <if test="subject.grants != null">s.grants=#{subject.grants},</if>
+            <if test="subject.completeTime != null">s.complete_time=#{subject.completeTime},</if>
+            <if test="subject.financialcategory != null">s.financialcategory=#{subject.financialcategory},</if>
+            <if test="subject.bankcard != null">s.bankcard=#{subject.bankcard},</if>
+            <if test="subject.thesisProposal != null and subject.thesisProposal.id != null">s.thesis_proposal_id=#{subject.thesisProposal.id},</if>
+            <if test="subject.projectNumber != null">s.project_number=#{subject.projectNumber},</if>
+            <if test="subject.projectReference != null">s.project_reference=#{subject.projectReference},</if>
+            <if test="subject.conclusionNumber != null">s.conclusion_number=#{subject.conclusionNumber},</if>
+            <if test="subject.subjectClassification != null">s.subject_classification=#{subject.subjectClassification}</if>
+        </set>
+        WHERE s.id=#{subject.id}
+        <if test="userId != null"> AND s.user_id=#{userId}</if>
+        <if test="states != null">
+            AND s.state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="unitIds != null">
+            AND u.unit_id IN
+            <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

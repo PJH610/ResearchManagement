@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectPersonnelDao">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.zhuoyue.researchManement.bean.SubjectPersonnel" >
+        INSERT INTO tb_subjects_personnel(subject_id,name,age,unit,task,position,education)
+        VALUES (#{subjectId},#{name},#{age},#{unit},#{task},#{position},#{education})
+    </insert>
+
+    <select id="listBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectPersonnel" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_personnel WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="com.zhuoyue.researchManement.bean.SubjectPersonnel">
+        SELECT * FROM tb_subjects_personnel WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectPersonnel">
+        UPDATE tb_subjects_personnel
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="age != null">age=#{age},</if>
+            <if test="unit != null">unit=#{unit},</if>
+            <if test="task != null">task=#{task},</if>
+            <if test="position != null">position=#{position},</if>
+            <if test="education != null">education=#{education}</if>
+        </set>
+        WHERE id=#{id} AND subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_personnel WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

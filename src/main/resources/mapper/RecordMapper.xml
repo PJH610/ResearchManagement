@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.RecordDao">
+
+    <resultMap id="recordResultMap" type="com.zhuoyue.researchManement.bean.Record">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="host" property="host" />
+        <result column="unit" property="unit" />
+        <result column="year" property="year" />
+        <result column="pronum" property="pronum" />
+        <result column="filenum" property="filenum" />
+        <result column="subject" property="subject" />
+        <result column="classification" property="classification" />
+        <association property="thesisProposal" column="thesis_proposal_fileid" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+        <association property="mediumReport" column="medium_report_fileid" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+        <association property="finalReport" column="final_report_fileid" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhuoyue.researchManement.bean.Record">
+        INSERT INTO tb_records(name,host,unit,year,pronum,filenum,subject,classification,thesis_proposal_fileid,medium_report_fileid,final_report_fileid) VALUES (#{name},#{host},#{unit},#{year},#{pronum},#{filenum},#{subject},#{classification},#{thesisProposal.id},#{mediumReport.id},#{finalReport.id})
+    </insert>
+
+    <select id="listByName" resultMap="recordResultMap" parameterType="java.lang.String">
+        SELECT * FROM tb_records
+        <if test="name != null">WHERE tb_records.name LIKE #{name}"%"</if>
+        ORDER BY id DESC
+    </select>
+
+    <select id="selectById" resultMap="recordResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_records WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.Record">
+        UPDATE tb_records
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="host != null">host=#{host},</if>
+            <if test="unit != null">unit=#{unit},</if>
+            <if test="year != null">year=#{year},</if>
+            <if test="pronum != null">pronum=#{pronum},</if>
+            <if test="filenum != null">filenum=#{filenum},</if>
+            <if test="subject != null">subject=#{subject},</if>
+            <if test="classification != null">classification=#{classification},</if>
+            <if test="thesisProposal != null">thesis_proposal_fileid=#{thesisProposal.id},</if>
+            <if test="mediumReport != null">medium_report_fileid=#{mediumReport.id},</if>
+            <if test="finalReport != null">final_report_fileid=#{finalReport.id}</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.util.List">
+        DELETE FROM tb_records WHERE id IN
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

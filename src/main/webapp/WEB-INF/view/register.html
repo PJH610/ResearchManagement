@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>注册页面</title>
+    <script src="/js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<span>注册</span>
+<form id="register-form">
+    <table>
+        <tr>
+            <td>账号：</td>
+            <td><input type="text" name="uname" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" name="realname" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>密码：</td>
+            <td><input type="text" name="password" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>确认密码：</td>
+            <td><input type="text" name="re_password" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>性别：</td>
+            <td>
+                <input type="radio" name="gender" value="male" checked="checked">男
+                <input type="radio" name="gender" value="female">女
+            </td>
+        </tr>
+        <tr>
+            <td>民族：</td>
+            <td><input type="text" name="ethnic" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>单位：</td>
+            <td id="unit-select-box">
+                <input type="button" onclick="getAreas()" value="加载">
+            </td>
+        </tr>
+        <tr>
+            <td>出生日期：</td>
+            <td><input type="date" name="birthday" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>职务：</td>
+            <td><input type="text" name="position" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>职称：</td>
+            <td><input type="text" name="professional_title" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>电子邮件：</td>
+            <td><input type="text" name="email" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>手机：</td>
+            <td><input type="text" name="phone" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>固定电话：</td>
+            <td><input type="text" name="telephone" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>传真：</td>
+            <td><input type="text" name="fax" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>学历：</td>
+            <td><input type="text" name="education" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>学位：</td>
+            <td><input type="text" name="degree" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>专业：</td>
+            <td><input type="text" name="profession" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>邮政编码：</td>
+            <td><input type="text" name="postcode" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>通信地址：</td>
+            <td><input type="text" name="address" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="注册" onclick="register()"></td>
+        </tr>
+    </table>
+</form>
+<a href="/login">返回</a>
+<script type="text/javascript">
+    var areas;
+
+    $(function () {
+        getAreas();
+    });
+
+    var areaXhr;
+    function getAreas() {
+        if (areas) return;
+        if (areaXhr) areaXhr.abort();
+        areaXhr = $.ajax({
+            url: "/api/unit/area/list",
+            type: "get",
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    areas = result.data;
+                    var selects = '<input id="unit-input" type="hidden" name="unit_id" value="">'
+                        + '<select onchange="changeUnitSelect(this)">'
+                        + '<option value="">请选择</option>';
+
+                    for (x in areas) {
+                        selects += '<option value="' + x + '">' + areas[x].name + '</option>';
+                    }
+
+                    selects += '</select>'
+                        + '<select id="unit-select" onchange="$(\'#unit-input\').val($(this).val())">' + initUnitOption(areas[0].units) + '</select>';
+                    $("#unit-select-box").html(selects);
+                }
+            },error: function (result) {
+            }
+        });
+    }
+
+    function register() {
+        $.ajax({
+            url: "/api/user/register",
+            type: "post",
+            data: $("#register-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    window.location.href = "/login";
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+    
+    function changeUnitSelect(item) {
+        var index = $(item).val()
+        $("#unit-input").val("");
+        if (index) {
+            $("#unit-select").html(initUnitOption(areas[index].units));
+        } else {
+            $("#unit-select").html(initUnitOption());
+        }
+
+    }
+
+    function initUnitOption(units) {
+        var option = '<option value="">请选择</option>';
+        for (x in units) {
+            option += '<option value="' + units[x].id + '">' + units[x].name + '</option>';
+        }
+        return option;
+    }
+</script>
+</body>
+</html>

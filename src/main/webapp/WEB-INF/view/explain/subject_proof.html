@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>课题论证接口说明</title>
+</head>
+<body>
+    <ul>
+        <li>
+            <p>GET：<a href="/api/subject/proof/show/{subject_id}">/api/subject/proof/show/{subject_id}</a></p>
+            <p>描述：根据id查询课题论证</p>
+            <p>参数：subject_id(课题id) </p>
+        </li>
+        <li>
+            <p>POST：<a href="/api/subject/proof/update">/api/subject/proof/update</a></p>
+            <p>描述：根据id修改课题论证</p>
+            <p>参数：subject_id(课题id)，classification(学科类别，可为空)，name(课题名称，可为空)，value(研究价值，可为空)，target(研究目标，可为空)，
+                     method(研究方法，可为空)，file(附件路径，可为空)
+            </p>
+            <form action="/api/subject/proof/update" method="post" enctype="multipart/form-data">
+                <table>
+                    <tr>
+                        <td>课题id：</td>
+                        <td><input type="text" name="subject_id"/></td>
+                    </tr>
+                    <tr>
+                        <td>学科类别：</td>
+                        <td><input type="text" name="classification"/></td>
+                    </tr>
+                    <tr>
+                        <td>课题名称：</td>
+                        <td><input type="text" name="name"/></td>
+                    </tr>
+                    <tr>
+                        <td>研究价值：</td>
+                        <td><input type="text" name="value"/></td>
+                    </tr>
+                    <tr>
+                        <td>研究目标：</td>
+                        <td><input type="text" name="target"/></td>
+                    </tr>
+                    <tr>
+                        <td>研究方法：</td>
+                        <td><input type="text" name="method"/></td>
+                    </tr>
+                    <tr>
+                        <td>附件路径：</td>
+                        <td><input type="file" name="file"/></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="提交"/></td>
+                    </tr>
+                </table>
+            </form>
+        </li>
+    </ul>
+</body>
+</html>

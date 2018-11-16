@@ -1,0 +1,62 @@
+<h3>课题列表</h3>
+<table id="subject-list-table"></table>
+<div id="subject-list-page" class="page-box"></div>
+<a onclick="javascript:history.go(-1);">返回</a>
+<script type="text/javascript">
+    $(function () {
+        getSubjectList($pageNum);
+    });
+
+    var subjectListXhr;
+    function getSubjectList(pageNum) {
+        if (subjectListXhr) subjectListXhr.abort();
+        subjectListXhr = $.ajax({
+            url: "/api/subject/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].name + '</td>'
+                            + '<td class="user-realname">' + list[x].user.realname + '</td>'
+                            + '<td class="unit">' + list[x].user.unit.name + '</td>'
+                            + '<td class="year">' + list[x].year + '</td>'
+                            + '<td class="thesis_proposal">' + initReportStr(list[x].thesis_proposal) + '</td>'
+                            + '<td class="medium_report">' + initReportStr(list[x].medium_report) + '</td>'
+                            + '<td class="final_report">' + initReportStr(list[x].final_report) + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>支持人</th>'
+                        + '<th>单位</th>'
+                        + '<th>年度</th>'
+                        + '<th>开题报告</th>'
+                        + '<th>中期报告</th>'
+                        + '<th>结题报告</th>'
+                        + '</tr>';
+                    $("#subject-list-table").html(headTr + tr);
+
+                    initPage($("#subject-list-page"), data, getSubjectList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function initReportStr(report) {
+        return report ? "已提交" : "未提交";
+    }
+</script>

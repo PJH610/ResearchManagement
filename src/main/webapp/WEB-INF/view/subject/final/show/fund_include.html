@@ -1,0 +1,19 @@
+#parse('/subject/final/show/menu_include.html')
+<h3>课题资助经费总决算表</h3>
+<p>总资助金额： $!finalFunds.totalFund 元</p>
+<table>
+    <tr>
+        <th>年度</th>
+        <th>市教育局经费</th>
+        <th>其他经费</th>
+        <th>总计</th>
+    </tr>
+    #foreach($finalFund in $finalFunds.list)
+    <tr>
+        <td>$!dateTool.format('yyyy',$finalFund.year)</td>
+        <td>$!finalFund.fund</td>
+        <td>$!finalFund.otherFund</td>
+        <td>$!finalFund.totalFund</td>
+    </tr>
+    #end
+</table>

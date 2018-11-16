@@ -1,0 +1,45 @@
+<h3>预期最终成果变更申请</h3>
+<form id="subject-change-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <input type="hidden" name="id" value="$!change.id">
+    <input type="hidden" name="type" value="3">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!change.subject.name</td>
+        </tr>
+        <tr>
+            <td>原预期成果：</td>
+            <td>$!change.subject.finalresult</td>
+        </tr>
+        <tr>
+            <td>新预期成果：</td>
+            <td><input type="text" autocomplete="off" name="finalresult" value="$!change.finalresult"></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectChangeUpdate()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectChangeUpdate() {
+        $.ajax({
+            url: "/api/subject/change/update",
+            type: "post",
+            data: $("#subject-change-update-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/change/list/host");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

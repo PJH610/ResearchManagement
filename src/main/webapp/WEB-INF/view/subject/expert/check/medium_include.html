@@ -1,0 +1,52 @@
+<h3>专家指导小组成员意见</h3>
+<form id="subject-specialist-check-form">
+    <input type="hidden" name="id" value="$!specialistId">
+    <input type="hidden" name="type" value="$!specialist.type.value">
+    <input type="hidden" name="check_state" value="true">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!specialist.subject.name</td>
+        </tr>
+        <tr>
+            <td>专家姓名：</td>
+            <td>$!specialist.realname</td></d>
+        </tr>
+        <tr>
+            <td>签署时间：</td>
+            <td>
+                <input type="hidden" name="check_time" value="$!dateTool.format('yyyy-MM-dd',$currentTime)">
+                <span>$!dateTool.format('yyyy年MM月dd日',$currentTime)</span>
+            </td>
+        </tr>
+        <tr>
+            <td>点评意见：</td>
+            <td><textarea name="note">$!specialist.note</textarea></td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="提交" onclick="specialistCheck()">
+<input type="button" value="返回" onclick="history.go(-1);">
+<script type="text/javascript">
+    function specialistCheck() {
+        $.ajax({
+            url: "/api/subject/specialist/check",
+            type: "post",
+            data: $("#subject-specialist-check-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    history.go(-1);
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

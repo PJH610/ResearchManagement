@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectFeasibilityDao">
+
+    <insert id="insert" useGeneratedKeys="true" parameterType="com.zhuoyue.researchManement.bean.SubjectFeasibility" keyProperty="id">
+        INSERT INTO tb_subjects_feasibility(subject_id,achievement,task,requirement)
+        VALUE (#{subjectId},#{achievement},#{task},#{requirement})
+    </insert>
+
+    <select id="list" parameterType="com.zhuoyue.researchManement.bean.SubjectFeasibility" resultType="com.zhuoyue.researchManement.bean.SubjectFeasibility">
+        SELECT * FROM tb_subjects_feasibility
+    </select>
+
+    <select id="selectBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectFeasibility" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_feasibility WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId" parameterType="com.zhuoyue.researchManement.bean.SubjectFeasibility">
+        UPDATE tb_subjects_feasibility
+        <set>
+            <if test="achievement != null">achievement=#{achievement},</if>
+            <if test="task != null"> task=#{task},</if>
+            <if test="requirement != null"> requirement=#{requirement}</if>
+        </set>
+        WHERE subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_feasibility WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

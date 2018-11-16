@@ -1,0 +1,87 @@
+<span>课题申报</span>
+<form id="subject-add-form">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td><input type="text" autocomplete="off" name="name"></td>
+        </tr>
+        <tr>
+            <td>学科分类：</td>
+            <td>
+                <input type="hidden" name="classification" value="">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($classification in $classifications)
+                    <option value="$!classification.value">$!classification.desc</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>申请课题类别：</td>
+            <td>
+                <input type="hidden" name="category" value="">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($category in $categorys)
+                    <option value="$!category.value">$!category.desc</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>预期最终成果：</td>
+            <td><input type="text" autocomplete="off" name="final_result"></td>
+        </tr>
+        <tr>
+            <td>申请资助经费(元)：</td>
+            <td><input type="text" autocomplete="off" name="grants"></td>
+        </tr>
+        <tr>
+            <td>预计完成时间：</td>
+            <td><input type="date" autocomplete="off" name="complete_time"></td>
+        </tr>
+        <tr>
+            <td>经费类别：</td>
+            <td>
+                <input type="hidden" name="financialcategory">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($financialcategory in $financialcategorys)
+                    <option value="$!financialcategory.value">$!financialcategory.desc</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>开户银行及单位国库支付中心账号(B类免填)：</td>
+            <td><input type="text" autocomplete="off" name="bankcard"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="提交" onclick="subjectAdd()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function subjectAdd() {
+        $.ajax({
+            url: "/api/subject/add",
+            type: "post",
+            data: $("#subject-add-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    window.location.href = "/subject/host";
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

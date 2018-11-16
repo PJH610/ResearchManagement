@@ -1,0 +1,65 @@
+<h3>课题列表</h3>
+<table id="subject-list-table"></table>
+<div id="subject-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectList($pageNum);
+    });
+
+    var recordListXhr;
+    function getSubjectList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/subject/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].name + '</td>'
+                            + '<td class="year">' + list[x].year + '</td>'
+                            + '<td>' + initThesisReport(list[x].thesis_proposal) + '</td>'
+                            + '<td>' + initMediumReport(list[x].thesis_proposal,list[x].id) + '</td>'
+                            + '<td>' + initFinalReport(list[x].thesis_proposal,list[x].id) + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>年度</th>'
+                        + '<th>开题报告</th>'
+                        + '<th>中期报告</th>'
+                        + '<th>结题报告</th>'
+                        + '</tr>';
+                    $("#subject-list-table").html(headTr + tr);
+
+                    initPage($("#subject-list-page"), data, getSubjectList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+    
+    function initThesisReport(thesis_proposal) {
+        return thesis_proposal ? '<a>点击下载</a>' : '<span>尚未提交</span>';
+    }
+
+    function initMediumReport(medium_report_id,id) {
+        return medium_report_id ? '<a data-url="/subject/' + id + '/medium/show" onclick="openPage(this)">点击浏览</a>' : '<span>尚未提交</span>';
+    }
+
+    function initFinalReport(final_report_id,id) {
+        return final_report_id ? '<a data-url="/subject/' + id + '/final/show/subject" onclick="openPage(this)">点击浏览</a>' : '<span>尚未提交</span>';
+    }
+</script>

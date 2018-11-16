@@ -1,0 +1,130 @@
+<h3>专家指导小组成员意见</h3>
+<form id="subject-specialist-check-form">
+    <input type="hidden" name="id" value="$!specialistId">
+    <input type="hidden" name="type" value="$!specialist.type.value">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!specialist.subject.name</td>
+        </tr>
+        <tr>
+            <td>课题申请人姓名：</td>
+            <td>$!specialist.subject.user.realname</td>
+        </tr>
+        <tr>
+            <td>申请课题类别：</td>
+            <td>$!specialist.subject.category.desc</td>
+        </tr>
+        <tr>
+            <td>专家姓名：</td>
+            <td>$!specialist.realname</td></d>
+        </tr>
+        <tr>
+            <td>签署时间：</td>
+            <td>
+                <input type="hidden" name="check_time" value="$!dateTool.format('yyyy-MM-dd',$currentTime)">
+                <span>$!dateTool.format('yyyy年MM月dd日',$currentTime)</span>
+            </td>
+        </tr>
+        <tr>
+            <td>选题研究价值：</td>
+            <td>
+                <input type="hidden" name="value_score" value="$!specialist.valueScore">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($i in [0..30])
+                    <option value="$!i" #if($i == $specialist.valueScore)selected="selected"#end>$!i</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>研究目标具体有达成度：</td>
+            <td>
+                <input type="hidden" name="achievement_score" value="$!specialist.achievementScore">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($i in [0..20])
+                    <option value="$!i" #if($i == $specialist.achievementScore)selected="selected"#end>$!i</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>研究内容恰当、假设合理：</td>
+            <td>
+                <input type="hidden" name="validity_score" value="$!specialist.validityScore">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($i in [0..20])
+                    <option value="$!i" #if($i == $specialist.validityScore)selected="selected"#end>$!i</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>研究过程与方法是否科学：</td>
+            <td>
+                <input type="hidden" name="scientific_score" value="$!specialist.scientificScore">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($i in [0..20])
+                    <option value="$!i" #if($i == $specialist.scientificScore)selected="selected"#end>$!i</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>研究基础与研究条件：</td>
+            <td>
+                <input type="hidden" name="condition_score" value="$!specialist.conditionScore">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($i in [0..10])
+                    <option value="$!i" #if($i == $specialist.conditionScore)selected="selected"#end>$!i</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否同意推荐：</td>
+            <td>
+                <input type="hidden" name="check_state" value="$!specialist.checkState">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    <option value="true" #if($specialist.checkState == true)selected="selected"#end>是</option>
+                    <option value="false" #if($specialist.checkState == false)selected="selected"#end>否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>推荐意见：</td>
+            <td><textarea name="note">$!specialist.note</textarea></td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="提交" onclick="specialistCheck()">
+<input type="button" value="返回" onclick="history.go(-1);">
+<script type="text/javascript">
+    function specialistCheck() {
+        $.ajax({
+            url: "/api/subject/specialist/check",
+            type: "post",
+            data: $("#subject-specialist-check-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    history.go(-1);
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

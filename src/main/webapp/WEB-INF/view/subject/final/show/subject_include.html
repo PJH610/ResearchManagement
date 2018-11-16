@@ -1,0 +1,75 @@
+#parse('/subject/final/show/menu_include.html')
+<h3>课题结题信息</h3>
+<table>
+    <tr>
+        <td>课题名称：</td>
+        <td>$!subjectFinal.subject.name</td>
+    </tr>
+    <tr>
+        <td>工作单位：</td>
+        <td>$!subjectFinal.subject.user.unit.name</td>
+    </tr>
+    <tr>
+        <td>课题主持人：</td>
+        <td>$!subjectFinal.subject.user.realname</td>
+    </tr>
+    <tr>
+        <td>联系地址：</td>
+        <td>$!subjectFinal.subject.user.address</td>
+    </tr>
+    <tr>
+        <td>邮编：</td>
+        <td>$!subjectFinal.subject.user.postcode</td>
+    </tr>
+    <tr>
+        <td>电子邮件：</td>
+        <td>$!subjectFinal.subject.user.email</td>
+    </tr>
+    <tr>
+        <td>办公电话：</td>
+        <td>$!subjectFinal.subject.user.telephone</td>
+    </tr>
+    <tr>
+        <td>手机：</td>
+        <td>$!subjectFinal.subject.user.phone</td>
+    </tr>
+    <tr>
+        <td>原定研究起止时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd日',$subjectFinal.planningTime)</td>
+    </tr>
+    <tr>
+        <td>原定研究成果形式：</td>
+        <td>$!subjectFinal.planningForm</td>
+    </tr>
+    <tr>
+        <td>实际完成时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd日',$subjectFinal.endTime)</td>
+    </tr>
+    <tr>
+        <td>申请结题验收时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd日',$subjectFinal.acceptanceTime)</td>
+    </tr>
+    <tr>
+        <td>申请结题验收方式：</td>
+        <td>$!subjectFinal.type.desc</td>
+    </tr>
+</table>
+<h3>课题研究人员列表</h3>
+<table>
+    <tr>
+        <th>主要研究人员姓名</th>
+        <th>单位</th>
+        <th>职务/职称</th>
+        <th>课题所承担工作</th>
+    </tr>
+    #foreach($personnel in $personnels)
+    <tr>
+        <td>$!personnel.name</td>
+        <td>$!personnel.unit</td>
+        <td>$!personnel.age</td>
+        <td>$!personnel.position</td>
+        <td>$!personnel.education</td>
+        <td>$!personnel.task</td>
+    </tr>
+    #end
+</table>

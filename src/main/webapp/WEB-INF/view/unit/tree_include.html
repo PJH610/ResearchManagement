@@ -1,0 +1,72 @@
+<h3>单位结构</h3>
+<div id="unit-tree-box" class="unit-tree" data-id="">
+    <ul ></ul>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: "/api/unit/tree/show",
+            type: "get",
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    initTree(result.data, $("#unit-tree-box"));
+                }
+            },error: function (result) {
+            }
+        });
+    });
+
+    function levelDesc(level) {
+        switch (level) {
+            case 0:
+                return "市科研办管理员";
+            case 1:
+                return "区科研办管理员";
+            case 2:
+                return "学校管理员";
+            default:
+                return "无效";
+        }
+    }
+
+    function initTree(data, box) {
+        var lis = '<ul>'
+            + '<h3>' + levelDesc(data.level) + '</h3>';
+        var child = data.child;
+        for (x in child) {
+            lis += '<li data-id="' + child[x].id + '">'
+                + '<p onclick="getTree(this)">' + child[x].name + '</p>'
+                + '<div class="unit-tree" data-id="' + child[x].id + '"></div>'
+                + '</li>';
+        }
+        lis += '<p><input type="button" value="添加"></p>'
+            + '</ul>';
+        box.html(lis);
+    }
+
+    function getTree(item) {
+        var li = $(item).closest("li");
+        $.ajax({
+            url: "/api/unit/tree/show/" + li.data("id"),
+            type: "get",
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    initTree(result.data, $(item).siblings(".unit-tree"));
+                }
+            },error: function (result) {
+            }
+        });
+    }
+</script>

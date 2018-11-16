@@ -1,0 +1,67 @@
+<h3>重要更变列表</h3>
+<table id="subject-list-table"></table>
+<div id="subject-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectList($pageNum);
+    });
+
+    var subjectListXhr;
+    function getSubjectList(pageNum) {
+        if (subjectListXhr) subjectListXhr.abort();
+        subjectListXhr = $.ajax({
+            url: "/api/subject/change/list/subject",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td>'
+                            + '<a data-url="/subject/' + list[x].id + '/approval/main" onclick="openPage(this)">' + list[x].name + '</a>'
+                            + '</td>'
+                            + '<td class="year">' + list[x].year + '</td>'
+                            + '<td>' + initProgress(list[x]) + '</td>'
+                            + '<td>'
+                            + '<a data-url="/subject/' + list[x].id + '/change/edit/add/completetime" onclick="openPage(this)">完成时间</a>'
+                            + '<a data-url="/subject/' + list[x].id + '/change/edit/add/finalresult" onclick="openPage(this)">研究成果</a>'
+                            + '</td>'
+                            + '<td>'
+                            + '<a data-url="/subject/' + list[x].id + '/change/list/host" onclick="openPage(this)">查看</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>年度</th>'
+                        + '<th>进度</th>'
+                        + '<th>更变内容</th>'
+                        + '<th>更变记录</th>'
+                        + '</tr>';
+                    $("#subject-list-table").html(headTr + tr);
+
+                    initPage($("#subject-list-page"), data, getSubjectList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+    
+    function initProgress(subject) {
+        if (subject.final_report_state) return "结题验收报告" + subject.final_report_state.desc;
+        if (subject.medium_report_state) return "中期自评报告" + subject.medium_report_state.desc;
+        if (subject.thesis_proposal) return "开题报告提交成功";
+        return "等待开题报告提交";
+    }
+</script>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectSpecialistDao">
+    <resultMap id="speciallistResultMap" type="com.zhuoyue.researchManement.bean.SubjectSpecialist">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId"/>
+        <result column="subject_id" property="subjectId" />
+        <result column="realname" property="realname" />
+        <result column="type" property="type" />
+        <result column="note" property="note" />
+        <result column="check_time" property="checkTime" />
+        <result column="value_score" property="valueScore" />
+        <result column="achievement_score" property="achievementScore" />
+        <result column="validity_score" property="validityScore" />
+        <result column="scientific_score" property="scientificScore" />
+        <result column="condition_score" property="conditionScore" />
+        <result column="check_state" property="checkState" />
+        <association property="subject" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectDao.selectById" />
+    </resultMap>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.zhuoyue.researchManement.bean.SubjectSpecialist">
+        INSERT INTO tb_subjects_specialist(user_id,subject_id,type,note,check_time,value_score,achievement_score,validity_score,scientific_score,condition_score,check_state) VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.userId},#{item.subjectId},#{item.type},#{item.note},#{item.checkTime},#{item.valueScore},#{item.achievementScore},#{item.validityScore},#{item.scientificScore},#{item.conditionScore},#{item.checkState})
+        </foreach>
+    </insert>
+
+    <select id="list" resultMap="speciallistResultMap">
+        SELECT ss.*,u.realname FROM tb_subjects_specialist ss LEFT JOIN tb_users u ON ss.user_id=u.id
+        <if test="states != null">INNER JOIN tb_subjects s ON ss.subject_id=s.id</if>
+        <where>
+            <if test="userId != null">ss.user_id=#{userId}</if>
+            <if test="type != null">AND ss.type=#{type}</if>
+            <if test="checked">AND ss.check_state IS NOT NULL</if>
+            <if test="!checked">AND ss.check_state IS NULL</if>
+            <if test="states != null">
+                AND s.state IN
+                <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY ss.id DESC
+    </select>
+
+    <select id="listApproval" resultType="com.zhuoyue.researchManement.bean.SubjectSpecialist" parameterType="java.lang.Long">
+        SELECT ss.*,u.realname FROM tb_subjects_specialist ss LEFT JOIN tb_users u ON ss.user_id=u.id WHERE ss.subject_id=#{subjectId} AND ss.type=1
+    </select>
+
+    <select id="listMedium" resultType="com.zhuoyue.researchManement.bean.SubjectSpecialist" parameterType="java.lang.Long">
+        SELECT ss.*,u.realname FROM tb_subjects_specialist ss LEFT JOIN tb_users u ON ss.user_id=u.id WHERE ss.subject_id=#{subjectId} AND ss.type=2
+    </select>
+
+    <select id="selectById" resultMap="speciallistResultMap" parameterType="java.lang.Long">
+        SELECT ss.*,u.realname FROM tb_subjects_specialist ss LEFT JOIN tb_users u ON ss.user_id=u.id WHERE ss.id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectSpecialist">
+        UPDATE tb_subjects_specialist ss
+        <if test="states != null">INNER JOIN tb_subjects s ON ss.subject_id=s.id</if>
+        <set>
+            <if test="specialist.note != null">ss.note=#{specialist.note},</if>
+            <if test="specialist.checkTime != null">ss.check_time=#{specialist.checkTime},</if>
+            <if test="specialist.valueScore != null">ss.value_score=#{specialist.valueScore},</if>
+            <if test="specialist.achievementScore != null">ss.achievement_score=#{specialist.achievementScore},</if>
+            <if test="specialist.validityScore != null">ss.validity_score=#{specialist.validityScore},</if>
+            <if test="specialist.scientificScore != null">ss.scientific_score=#{specialist.scientificScore},</if>
+            <if test="specialist.conditionScore != null">ss.condition_score=#{specialist.conditionScore},</if>
+            <if test="specialist.checkState != null">ss.check_state=#{specialist.checkState}</if>
+        </set>
+        WHERE ss.id=#{specialist.id} AND ss.user_id=#{userId} AND ss.type=#{type}
+        <if test="states != null">
+            AND s.state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_specialist WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBySubjectId">
+        DELETE FROM tb_subjects_specialist WHERE subject_id=#{subjectId} AND type=#{type}
+    </delete>
+</mapper>

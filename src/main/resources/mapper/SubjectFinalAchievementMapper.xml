@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectFinalAchievementDao">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.zhuoyue.researchManement.bean.SubjectFinalAchievement" >
+        INSERT INTO tb_subjects_final_achievement(subject_id,name,author,form,word_number,complete_time,journal,situation)
+        VALUES (#{subjectId},#{name},#{author},#{form},#{wordNumber},#{completeTime},#{journal},#{situation})
+    </insert>
+
+    <select id="listBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectFinalAchievement" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_final_achievement WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="com.zhuoyue.researchManement.bean.SubjectFinalAchievement">
+        SELECT * FROM tb_subjects_final_achievement WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectFinalAchievement">
+        UPDATE tb_subjects_final_achievement
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="author != null">author=#{author},</if>
+            <if test="form != null">form=#{form},</if>
+            <if test="wordNumber != null">word_number=#{wordNumber},</if>
+            <if test="completeTime != null">complete_time=#{completeTime},</if>
+            <if test="journal != null">journal=#{journal},</if>
+            <if test="situation != null">situation=#{situation}</if>
+        </set>
+        WHERE id=#{id} AND subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_final_achievement WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

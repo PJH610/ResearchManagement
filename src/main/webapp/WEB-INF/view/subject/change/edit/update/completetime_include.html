@@ -1,0 +1,45 @@
+<h3>预计完成时间变更申请</h3>
+<form id="subject-change-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <input type="hidden" name="id" value="$!change.id">
+    <input type="hidden" name="type" value="2">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!change.subject.name</td>
+        </tr>
+        <tr>
+            <td>原完成时间：</td>
+            <td>$!dateTool.format('yyyy/MM/dd',$!change.subject.completeTime)</td>
+        </tr>
+        <tr>
+            <td>新完成时间：</td>
+            <td><input type="date" name="complete_time" value="$!dateTool.format('yyyy-MM-dd',$!change.completeTime)"></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectChangeUpdate()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectChangeUpdate() {
+        $.ajax({
+            url: "/api/subject/change/update",
+            type: "post",
+            data: $("#subject-change-update-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/change/list/host");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

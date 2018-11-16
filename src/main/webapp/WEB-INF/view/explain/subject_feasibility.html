@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>课题可行性接口说明</title>
+</head>
+<body>
+    <ul>
+        <li>
+            <p>GET：<a href="/api/subject/feasibility/show/{subject_id}">/api/subject/feasibility/show/{subject_id}</a></p>
+            <p>描述：根据课题id查询课题可行性</p>
+            <p>参数：subject_id(课题id)</p>
+        </li>
+        <li>
+            <p>POST：<a href="/api/subject/feasibility/update">/api/subject/feasibility/update</a></p>
+            <p>描述：根据课题id修改课题可行性</p>
+            <p>参数：subject_id(课题id，关联课题表)，achievement(成果，可为空)，task(分工，可为空)，requirement(保障条件，可为空)</p>
+        </li>
+    </ul>
+</body>
+</html>

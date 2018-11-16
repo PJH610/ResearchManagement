@@ -1,0 +1,84 @@
+<span>备案列表</span>
+<table id="record-list-table"></table>
+<div id="record-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getRecordList(1);
+    });
+
+    var recordListXhr;
+    function getRecordList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/record/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].name + '</td>'
+                            + '<td class="classification">' + list[x].classification + '</td>'
+                            + '<td class="host">' + list[x].host + '</td>'
+                            + '<td class="unit">' + list[x].unit + '</td>'
+                            + '<td>'
+                            + '<a data-url="/record/' + list[x].id + '/show" onclick="openPage(this)">浏览</a>'
+                            + '<a data-url="/record/' + list[x].id + '/edit" onclick="openPage(this)">修改</a>'
+                            + '<a onclick="recordDelete(this)">删除</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>课题名称</th>'
+                        + '<th>课题类别</th>'
+                        + '<th>负责人</th>'
+                        + '<th>所在单位</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#record-list-table").html(headTr + tr);
+
+                    initPage($("#record-list-page"), data, getRecordList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function recordDelete(item) {
+        if (confirm("您确定删除吗?此操作将不能恢复!")) {
+            var tr = $(item).closest("tr");
+            var id = tr.data("id");
+            $.ajax({
+                url: "/api/record/delete",
+                type: "post",
+                data: "id=" + id,
+                dataType: "json",
+                cache: false,
+                beforeSend: function() {
+                },
+                complete: function() {
+                },
+                success: function (result) {
+                    alert(result.msg);
+                    if (result.code == 200) {
+                        tr.remove();
+                    }
+                },error: function (result) {
+                    alert("网络连接失败！");
+                }
+            });
+        }
+
+    }
+</script>

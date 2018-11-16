@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>用户接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/user/login">/api/user/login</a></p>
+        <p>描述：登录接口</p>
+        <p>参数: name(用户名，不为空) ，password(密码，不为空)</p>
+        <form action="/api/user/login" method="post">
+            <table>
+                <tr>
+                    <td>用户名：</td>
+                    <td><input type="text" name="name"/></td>
+                </tr>
+                <tr>
+                    <td>密码：</td>
+                    <td><input type="password" name="password"/></td>
+                </tr>
+                <tr>
+                <tr>
+                    <td><input type="submit" value="提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>POST：<a href="/api/user/logout">/api/user/logout</a></p>
+        <p>描述：退出登录</p>
+        <p>参数: 无</p>
+        <form action="/api/user/logout" method="post">
+            <table>
+                <tr>
+                    <td><input type="submit" value="注销"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>POST：<a href="/api/user/register">/api/user/register</a></p>
+        <p>描述：注册接口</p>
+        <p>参数：uname(账号)，realname(姓名)，password(密码)，gender(性别，male，female)，ethnic(民族，可为空)，unit_id(单位id)
+            birthday(出生日期,格式："yyyy-MM-dd")，position(职务，可为空)，professional_title(职称，可为空)，email(电子邮箱，可为空)，
+            phone(手机号码，可为空)，telephone(固定电话，可为空)，fax(传真，可为空)，education(学历，可为空)，degree(学位，可为空)，
+            profession(专业，可为空)，postcode(邮政编码，可为空)，address(通信地址，可为空)
+        </p>
+        <form action="/api/user/register" method="post">
+            <table>
+                <tr>
+                    <td>账号：</td>
+                    <td><input type="text" name="uname"/></td>
+                </tr>
+                <tr>
+                    <td>姓名：</td>
+                    <td><input type="text" name="realname"/></td>
+                </tr>
+                <tr>
+                    <td>密码：</td>
+                    <td><input type="text" name="password"/></td>
+                </tr>
+                <tr>
+                    <td>性别：</td>
+                    <td><input type="text" name="gender"/></td>
+                </tr>
+                <tr>
+                    <td>民族：</td>
+                    <td><input type="text" name="ethnic"/></td>
+                </tr>
+                <tr>
+                    <td>单位：</td>
+                    <td><input type="text" name="unit_id"/></td>
+                </tr>
+                <tr>
+                    <td>出生日期：</td>
+                    <td><input type="text" name="birthday"/></td>
+                </tr>
+                <tr>
+                    <td>电子邮箱：</td>
+                    <td><input type="text" name="email"/></td>
+                </tr>
+                <tr>
+                    <td>职务：</td>
+                    <td><input type="text" name="position"/></td>
+                </tr>
+                <tr>
+                    <td>职称：</td>
+                    <td><input type="text" name="professional_title"/></td>
+                </tr>
+                <tr>
+                    <td>手机：</td>
+                    <td><input type="text" name="phone"/></td>
+                </tr>
+                <tr>
+                    <td>固定电话：</td>
+                    <td><input type="text" name="telephone"/></td>
+                </tr>
+                <tr>
+                    <td>传真：</td>
+                    <td><input type="text" name="fax"/></td>
+                </tr>
+                <tr>
+                    <td>学历：</td>
+                    <td><input type="text" name="education"/></td>
+                </tr>
+                <tr>
+                    <td>学位：</td>
+                    <td><input type="text" name="degree"/></td>
+                </tr>
+                <tr>
+                    <td>专业：</td>
+                    <td><input type="text" name="profession"/></td>
+                </tr>
+                <tr>
+                    <td>邮政编码：</td>
+                    <td><input type="text" name="postcode"/></td>
+                </tr>
+                <tr>
+                    <td>地址：</td>
+                    <td><input type="text" name="address"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="注册提交"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>GET：<a href="/api/user/list">/api/user/list</a></p>
+        <p>描述: 查看首页用户列表</p>
+        <p>参数：page_num(默认为第一页，可为空)，page_size(默认为10条数据，可为空) </p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/user/show/{id}">/api/user/show/{id}</a></p>
+        <p>描述：根据id查询用户</p>
+        <p>参数：id</p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/user/current">/api/user/current</a></p>
+        <p>描述：获取当前用户信息</p>
+        <p>参数：无</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/user/update">/api/user/update</a></p>
+        <p>描述：修改资料接口</p>
+        <p>参数：realname(姓名，可为空)，gender(性别，可为空，值：male，female)，ethnic(民族，可为空)，unit_id(单位id，可为空)
+            birthday(出生日期,格式："yyyy-MM-dd")，position(职务，可为空)，professional_title(职称，可为空)，email(电子邮箱，可为空)，
+            phone(手机号码，可为空)，telephone(固定电话，可为空)，fax(传真，可为空)，education(学历，可为空)，degree(学位，可为空)，
+            profession(专业，可为空)，postcode(邮政编码，可为空)，address(通信地址，可为空)
+        </p>
+        <form action="/api/user/update" method="post">
+            <table>
+                <tr>
+                    <td>姓名：</td>
+                    <td><input type="text" name="realname"/></td>
+                </tr>
+                <tr>
+                    <td>性别：</td>
+                    <td><input type="text" name="gender"/></td>
+                </tr>
+                <tr>
+                    <td>民族：</td>
+                    <td><input type="text" name="ethnic"/></td>
+                </tr>
+                <tr>
+                    <td>单位：</td>
+                    <td><input type="text" name="unit_id"/></td>
+                </tr>
+                <tr>
+                    <td>出生日期：</td>
+                    <td><input type="text" name="birthday"/></td>
+                </tr>
+                <tr>
+                    <td>电子邮箱：</td>
+                    <td><input type="text" name="email"/></td>
+                </tr>
+                <tr>
+                    <td>职务：</td>
+                    <td><input type="text" name="position"/></td>
+                </tr>
+                <tr>
+                    <td>职称：</td>
+                    <td><input type="text" name="professional_title"/></td>
+                </tr>
+                <tr>
+                    <td>手机：</td>
+                    <td><input type="text" name="phone"/></td>
+                </tr>
+                <tr>
+                    <td>固定电话：</td>
+                    <td><input type="text" name="telephone"/></td>
+                </tr>
+                <tr>
+                    <td>传真：</td>
+                    <td><input type="text" name="fax"/></td>
+                </tr>
+                <tr>
+                    <td>学历：</td>
+                    <td><input type="text" name="education"/></td>
+                </tr>
+                <tr>
+                    <td>学位：</td>
+                    <td><input type="text" name="degree"/></td>
+                </tr>
+                <tr>
+                    <td>专业：</td>
+                    <td><input type="text" name="profession"/></td>
+                </tr>
+                <tr>
+                    <td>邮政编码：</td>
+                    <td><input type="text" name="postcode"/></td>
+                </tr>
+                <tr>
+                    <td>地址：</td>
+                    <td><input type="text" name="address"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="修改"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>POST：<a href="/api/user/update/pwd">/api/user/update/pwd</a></p>
+        <p>描述：修改密码接口</p>
+        <p>参数：password(密码)，new_password(新密码)</p>
+        <form action="/api/user/alterPw" method="post">
+            <table>
+                <tr>
+                    <td>密码：</td>
+                    <td><input type="text" name="password"/></td>
+                </tr>
+                <tr>
+                    <td>新密码：</td>
+                    <td><input type="text" name="new_password"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="修改密码"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>POST：<a href="/api/user/delete">/api/user/delete</a></p>
+        <p>描述：删除用户账号（可批量删除）</p>
+        <p>参数: id</p>
+        <form action="/api/user/delete" method="post">
+            <table>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="删除"/></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

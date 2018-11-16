@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectScheduleDao">
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.zhuoyue.researchManement.bean.SubjectSchedule">
+        INSERT INTO tb_subjects_schedule(subject_id,starttime,endtime,content,name,host)
+        VALUES (#{subjectId},#{startTime},#{endTime},#{content},#{name},#{host})
+    </insert>
+
+    <select id="listBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectSchedule" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_schedule WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectById" resultType="com.zhuoyue.researchManement.bean.SubjectSchedule" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_schedule WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectSchedule">
+        UPDATE tb_subjects_schedule
+        <set>
+            <if test="startTime != null">starttime=#{startTime},</if>
+            <if test="endTime != null">endtime=#{endTime},</if>
+            <if test="content != null">content=#{content},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="host != null">host=#{host}</if>
+        </set>
+        WHERE id=#{id} AND subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_schedule WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

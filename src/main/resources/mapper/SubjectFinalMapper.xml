@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectFinalDao">
+
+    <resultMap id="finalResultMap" type="com.zhuoyue.researchManement.bean.SubjectFinal">
+    <id column="id" property="id" />
+    <result column="subject_id" property="subjectId" />
+    <result column="state" property="state" />
+    <result column="planning_time" property="planningTime" />
+    <result column="planning_form" property="planningForm" />
+    <result column="end_time" property="endTime" />
+    <result column="acceptance_time" property="acceptanceTime" />
+    <result column="type" property="type" />
+    <result column="achievement" property="achievement" />
+    <result column="content" property="content" />
+    <result column="situation" property="situation" />
+    <result column="changes" property="changes" />
+    <association property="file" column="file_id" select="com.zhuoyue.researchManement.dao.DownloadFileDao.selectById" />
+    <association property="subject" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectDao.selectById" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuoyue.researchManement.bean.SubjectFinal">
+    INSERT INTO tb_subjects_final(subject_id,state,planning_time,planning_form,end_time,acceptance_time,type,achievement,content,situation,changes,file_id)
+    VALUES (#{subjectId},#{state},#{planningTime},#{planningForm},#{endTime},#{acceptanceTime},#{type},#{achievement},#{content},#{situation},#{changes},#{file.id})
+    </insert>
+
+    <select id="list" resultMap="finalResultMap">
+        SELECT * FROM tb_subjects_final ORDER BY id DESC
+    </select>
+
+    <select id="selectById" resultMap="finalResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_final WHERE id=#{id}
+    </select>
+
+    <select id="selectBySubjectId" resultMap="finalResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_final WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectState" resultType="com.zhuoyue.researchManement.enums.SubjectFinalState" parameterType="java.lang.Long">
+        SELECT state FROM tb_subjects_final WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId">
+        UPDATE (tb_subjects_final sf INNER JOIN tb_subjects s ON sf.subject_id=s.id) INNER JOIN tb_users u on s.user_id=u.id
+        <set>
+            <if test="subjectFinal.state != null">sf.state=#{subjectFinal.state},</if>
+            <if test="subjectFinal.planningTime != null">sf.planning_time=#{subjectFinal.planningTime},</if>
+            <if test="subjectFinal.planningForm != null">sf.planning_form=#{subjectFinal.planningForm},</if>
+            <if test="subjectFinal.endTime != null">sf.end_time=#{subjectFinal.endTime},</if>
+            <if test="subjectFinal.acceptanceTime != null">sf.acceptance_time=#{subjectFinal.acceptanceTime},</if>
+            <if test="subjectFinal.type != null">sf.type=#{subjectFinal.type},</if>
+            <if test="subjectFinal.achievement != null">sf.achievement=#{subjectFinal.achievement},</if>
+            <if test="subjectFinal.content != null">sf.content=#{subjectFinal.content},</if>
+            <if test="subjectFinal.situation != null">sf.situation=#{subjectFinal.situation},</if>
+            <if test="subjectFinal.changes != null">sf.changes=#{subjectFinal.changes},</if>
+            <if test="subjectFinal.file != null and subjectFinal.file.id != null">sf.file_id=#{subjectFinal.file.id}</if>
+        </set>
+        WHERE sf.subject_id=#{subjectFinal.subjectId}
+        <if test="states != null">
+            AND sf.state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="userId != null"> AND s.user_id=#{userId}</if>
+        <if test="unitIds != null">
+            AND u.unit_id IN
+            <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_final WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

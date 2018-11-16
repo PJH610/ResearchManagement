@@ -1,0 +1,91 @@
+<h3>中期自评报告列表</h3>
+<table id="subject-medium-list-table"></table>
+<div id="subject-medium-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectMediumList($pageNum);
+    });
+
+    var meduimListXhr;
+    function getSubjectMediumList(pageNum) {
+        if (meduimListXhr) meduimListXhr.abort();
+        meduimListXhr = $.ajax({
+            url: "/api/subject/medium/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-subject_id="' + list[x].subject_id + '">'
+                            + '<td class="name">' + list[x].subject.name + '</td>'
+                            + '<td>' + list[x].subject.year + '</td>'
+                            + '<td class="state">' + list[x].state.desc + '</td>'
+                            + '<td class="operate">' + initOperate(list[x].subject_id, list[x].state.value) + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>年度</th>'
+                        + '<th>状态</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#subject-medium-list-table").html(headTr + tr);
+
+                    initPage($("#subject-medium-list-page"), data, getSubjectMediumList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function subjectMediumSubmit(item) {
+        if (confirm("您确定提交吗？提交后将不能再修改！")) {
+            var tr = $(item).closest("tr");
+            var subject_id = tr.data("subject_id");
+            $.ajax({
+                url: "/api/subject/medium/submit",
+                type: "post",
+                data: "subject_id=" + subject_id,
+                dataType: "json",
+                cache: false,
+                beforeSend: function() {
+                },
+                complete: function() {
+                },
+                success: function (result) {
+                    alert(result.msg);
+                    if (result.code == 200) {
+                        tr.children(".state").html("单位管理员审核中");
+                        tr.children(".operate").html(initOperate(subject_id));
+                    }
+                },error: function (result) {
+                    alert("网络连接失败！");
+                }
+            });
+        }
+
+    }
+
+    function initOperate(id, state) {
+        switch (state) {
+            case -1:
+            case 1:
+                return '<a data-url="/subject/' + id + '/medium/edit" onclick="openPage(this)">修改</a>'
+                    + '<a data-url="/subject/' + id + '/medium/show" onclick="openPage(this)">查看</a>'
+                    + '<a onclick="subjectMediumSubmit(this)">提交</a>';
+            default:
+                return '<a data-url="/subject/' + id + '/medium/show" onclick="openPage(this)">点击浏览</a>';
+        }
+    }
+</script>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>专家指导小组成员说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>GET：<a href="/api/subject/specialist/list">/api/subject/specialist/list</a></p>
+        <p>描述：查询</p>
+        <p>参数：page_num (默认为第一页，可为空)，page_size (默认为10条数据，可为空)</p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/specialist/show/{id}">/api/subject/specialist/show/{id}</a></p>
+        <p>描述：根据id查询内容</p>
+        <p>参数：id </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/specialist/update">/api/subject/specialist/update</a></p>
+        <p>描述：根据id修改专家指导小组成员</p>
+        <p>参数：id (主键)，name (专家姓名)，audit_opinion (审核意见)</p>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectFinalFundDao">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.zhuoyue.researchManement.bean.SubjectFinalFund" >
+        INSERT INTO tb_subjects_final_funds(subject_id,year,fund,other_fund)
+        VALUES (#{subjectId},#{year},#{fund},#{otherFund})
+    </insert>
+
+    <select id="listBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectFinalFund" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_final_funds WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="com.zhuoyue.researchManement.bean.SubjectFinalFund">
+        SELECT * FROM tb_subjects_final_funds WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectFinalFund">
+        UPDATE tb_subjects_final_funds
+        <set>
+            <if test="year != null">year=#{year},</if>
+            <if test="fund != null">fund=#{fund},</if>
+            <if test="otherFund != null">other_fund=#{otherFund}</if>
+        </set>
+        WHERE id=#{id} AND subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_final_funds WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

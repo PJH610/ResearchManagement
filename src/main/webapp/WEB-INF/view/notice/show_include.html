@@ -1,0 +1,9 @@
+<span>通知公告</span>
+$notice.file
+<p>$!notice.theme</p>
+<p>作者(来源)：$!notice.host</p>
+<p>发布时间：$!dateTool.format('yyyy年MM月dd日',$!notice.date)</p>
+<p>内容：$!notice.content</p>
+#if($!notice.file)
+<p><a href="$!notice.file.fileUri">附件下载</a></p>
+#end

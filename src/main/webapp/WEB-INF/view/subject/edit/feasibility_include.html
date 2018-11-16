@@ -1,0 +1,50 @@
+#parse('/subject/edit/menu_include.html')
+<h3>完成项目的可行性</h3>
+<form id="subject-feasibility-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>（一）本课题负责人已取得的相关研究成果及社会评价（引用、转载、获奖及被采纳情况），主要参考文献（限填10限）。</td>
+            <td><textarea name="achievement">$!feasibility.achievement</textarea></td>
+        </tr>
+        <tr>
+            <td>（二）课题组主要成员的主要研究经历、研究成果情况及研究分工。</td>
+            <td><textarea name="task">$!feasibility.task</textarea></td>
+        </tr>
+        <tr>
+            <td>（三）完成本课题的保障条件（如研究资料、实验仪器设备、配套经费、研究时间及所在单位条件等）。</td>
+            <td><textarea name="requirement">$!feasibility.requirement</textarea></td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="返回" data-url="/subject/host" onclick="openPage(this)">
+<input type="button" value="上一步" onclick="subjectFeasibilityUpdate('/subject/$!subjectId/edit/proof')">
+<input type="button" value="下一步" onclick="subjectFeasibilityUpdate('/subject/$!subjectId/edit/schedule')">
+<script type="text/javascript">
+    function subjectFeasibilityUpdate(skipUrl) {
+        $.ajax({
+            url: "/api/subject/feasibility/update",
+            type: "post",
+            data: $("#subject-feasibility-update-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    if (skipUrl) {
+                        openUrl(skipUrl);
+                    } else {
+                        alert(result.msg);
+                    }
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

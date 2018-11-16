@@ -1,0 +1,54 @@
+<h3>评审意见</h3>
+<table id="subject-specialist-list-table"></table>
+<div id="subject-specialist-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectSpecialistList($pageNum);
+    });
+
+    var recordListXhr;
+    function getSubjectSpecialistList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/subject/specialist/list/log",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        var subject = list[x].subject;
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td>'
+                            + '<a data-url="/subject/' + subject.id + '/show/main" onclick="openPage(this)">' + subject.name + '</a>'
+                            + '</td>'
+                            + '<td>' + list[x].type.desc + '</td>'
+                            + '<td>' + list[x].check_time + '</td>'
+                            + '<td>' + list[x].note + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>课题名称</th>'
+                        + '<th>表格类型</th>'
+                        + '<th>点评时间</th>'
+                        + '<th>评审内容</th>'
+                        + '</tr>';
+                    $("#subject-specialist-list-table").html(headTr + tr);
+
+                    initPage($("#subject-specialist-list-page"), data, getSubjectSpecialistList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+</script>

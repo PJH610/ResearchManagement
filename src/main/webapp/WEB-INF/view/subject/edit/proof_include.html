@@ -1,0 +1,69 @@
+#parse('/subject/edit/menu_include.html')
+<h3>课题论证设计</h3>
+<form id="subject-proof-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>学科类别：</td>
+            <td>$!proof.subject.classification.desc</td>
+        </tr>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!proof.subject.name</td>
+        </tr>
+        <tr>
+            <td>(一)本课题核心概念界定，国内外研究现状述评，选题意义及研究价值。</td>
+            <td><textarea name="value">$!proof.value</textarea></td>
+        </tr>
+        <tr>
+            <td>(二)本课题的研究目标、研究内容、研究假设和创新点。</td>
+            <td><textarea name="target">$!proof.target</textarea></td>
+        </tr>
+        <tr>
+            <td>(三)本课题的研究思路、研究方法、技术路线和实施步骤。</td>
+            <td><textarea name="method">$!proof.method</textarea></td>
+        </tr>
+        <tr>
+            <td>附加论证材料：</td>
+            <td>
+                #if($proof.file)
+                <a href="$!proof.file.fileUri">$!proof.file.filename</a>
+                #end
+                <input type="file" name="file">
+            </td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="返回" data-url="/subject/host" onclick="openPage(this)">
+<input type="button" value="上一步" onclick="subjectProofUpdate('/subject/$!subjectId/edit/recommender')">
+<input type="button" value="下一步" onclick="subjectProofUpdate('/subject/$!subjectId/edit/feasibility')">
+<script type="text/javascript">
+    function subjectProofUpdate(skipUrl) {
+        $.ajax({
+            url: "/api/subject/proof/update",
+            type: "post",
+            data: new FormData($("#subject-proof-update-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    if (skipUrl) {
+                        openUrl(skipUrl);
+                    } else {
+                        alert(result.msg);
+                    }
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

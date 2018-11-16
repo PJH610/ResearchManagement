@@ -1,0 +1,63 @@
+<h3>复评意见</h3>
+<table id="subject-specialist-list-table"></table>
+<div id="subject-specialist-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectSpecialistList($pageNum);
+    });
+
+    var recordListXhr;
+    function getSubjectSpecialistList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/subject/specialist/list/recheck",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td>'
+                            + '<a data-url="/subject/' + list[x].subject.id + '/show/main" onclick="openPage(this)">' + list[x].subject.name + '</a>'
+                            + '</td>'
+                            + '<td>' + list[x].value_score + '</td>'
+                            + '<td>' + list[x].achievement_score + '</td>'
+                            + '<td>' + list[x].validity_score + '</td>'
+                            + '<td>' + list[x].scientific_score + '</td>'
+                            + '<td>' + list[x].condition_score + '</td>'
+                            + '<td>' + list[x].total_score + '</td>'
+                            + '<td>'
+                            + '<a data-url="/subject/expert/' + list[x].id + '/check/subject" onclick="openPage(this)">复评</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>课题名称</th>'
+                        + '<th>选题研究价值</th>'
+                        + '<th>究目标具体有达成度</th>'
+                        + '<th>研究内容恰当假设合理</th>'
+                        + '<th>研究过程与方法科学</th>'
+                        + '<th>研究基础与研究条件</th>'
+                        + '<th>总分</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#subject-specialist-list-table").html(headTr + tr);
+
+                    initPage($("#subject-specialist-list-page"), data, getSubjectSpecialistList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+</script>

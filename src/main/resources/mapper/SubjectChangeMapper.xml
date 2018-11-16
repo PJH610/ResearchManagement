@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectChangeDao">
+
+    <resultMap id="changeResultMap" type="com.zhuoyue.researchManement.bean.SubjectChange">
+        <id column="id" property="id" />
+        <result column="subject_id" property="subjectId" />
+        <result column="type" property="type" />
+        <result column="state" property="state" />
+        <result column="user_id" property="userId" />
+        <result column="complete_time" property="completeTime" />
+        <result column="finalresult" property="finalresult" />
+        <association property="subject" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectDao.selectById" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.zhuoyue.researchManement.bean.SubjectChange" >
+        INSERT INTO tb_subjects_change(subject_id,type,state,user_id,complete_time,finalresult)
+        VALUES (#{subjectId},#{type},#{state},#{userId},#{completeTime},#{finalresult})
+    </insert>
+
+    <select id="list" resultMap="changeResultMap">
+        SELECT * FROM tb_subjects_change sc INNER JOIN tb_subjects s ON sc.subject_id=s.id INNER JOIN tb_users u ON s.user_id=u.id
+        <where>
+            <if test="subjectId != null">AND sc.subject_id=#{subjectId}</if>
+            <if test="states != null">
+                AND sc.state IN
+                <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="unitIds != null">
+                AND u.unit_id IN
+                <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY sc.id DESC
+    </select>
+
+    <select id="selectById" resultMap="changeResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_change WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectChange">
+        UPDATE tb_subjects_change
+        <set>
+            <if test="change.state != null">state=#{change.state},</if>
+            <if test="change.userId != null">user_id=#{change.userId},</if>
+            <if test="change.completeTime != null">complete_time=#{change.completeTime},</if>
+            <if test="change.finalresult != null">finalresult=#{change.finalresult},</if>
+        </set>
+        WHERE id=#{change.id} AND subject_id=#{change.subjectId} AND type=#{change.type}
+        <if test="states != null">
+            AND state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_change WHERE subject_id=#{subjectId} AND id IN
+        <foreach item="item" index="index" collection="id" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

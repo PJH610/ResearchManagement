@@ -1,0 +1,63 @@
+<h3>课题申报退回意见</h3>
+<form id="subject-approval-check-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <input type="hidden" name="check" value="false">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!approval.subject.name</td>
+        </tr>
+        <tr>
+            <td>课题申请人姓名：</td>
+            <td>$!approval.subject.user.realname</td>
+        </tr>
+        <tr>
+            <td>申请课题类别：</td>
+            <td>$!approval.subject.category.desc</td>
+        </tr>
+        <tr>
+            <td>市教育局科研办负责人姓名：</td>
+            <td><input type="text" autocomplete="off" name="leader_name" value="$!currentUser.realname"></td>
+        </tr>
+        <tr>
+            <td>退回时间：</td>
+            <td>
+                <input type="hidden" name="check_time" value="$!dateTool.format('yyyy-MM-dd',$currentTime)">
+                <span>$!dateTool.format('yyyy-MM-dd',$currentTime)</span>
+            </td>
+        </tr>
+        <tr>
+            <td>退回原因：</td>
+            <td><textarea name="note">$!approval.cityNote</textarea></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="提交" onclick="subjectCheck()">
+                <input type="button" value="返回" onclick="history.go(-1);">
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function subjectCheck() {
+        $.ajax({
+            url: "/api/subject/approval/check",
+            type: "post",
+            data: $("#subject-approval-check-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/list/city");
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

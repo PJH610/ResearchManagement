@@ -1,0 +1,44 @@
+<h3>修改课题经费</h3>
+<form id="subject-final-fund-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <input type="hidden" name="id" value="$!fund.id">
+    <table>
+        <tr>
+            <td>年度：</td>
+            <td><input type="text" autocomplete="off" name="year" value="$!dateTool.format('yyyy',$fund.year)"></td>
+        </tr>
+        <tr>
+            <td>市教育局资助经费：</td>
+            <td><input type="text" autocomplete="off" name="fund" value="$!fund.fund"></td>
+        </tr>
+        <tr>
+            <td>其他经费：</td>
+            <td><input type="text" autocomplete="off" name="other_fund" value="$!fund.otherFund"></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectFinalFundUpdate()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectFinalFundUpdate() {
+        $.ajax({
+            url: "/api/subject/final/fund/update",
+            type: "post",
+            data: $("#subject-final-fund-update-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/final/edit/fund");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

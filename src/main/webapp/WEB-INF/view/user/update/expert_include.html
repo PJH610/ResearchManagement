@@ -1,0 +1,75 @@
+<span>修改我的信息</span>
+<form id="user-update-info-form">
+    <input type="hidden" name="id" value="">
+    <table>
+        <tr>
+            <td>账号：</td>
+            <td><input type="text" disabled="disabled" value="$!currentUser.uname"></td>
+        </tr>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" name="realname" autocomplete="off" value="$!currentUser.realname"></td>
+        </tr>
+        <tr>
+            <td>单位：</td>
+            <td><input type="text" name="unit" autocomplete="off" value="$!currentUser.unit.name"></td>
+        </tr>
+        <tr>
+            <td>研究专长：</td>
+            <td><input type="text" name="profession" autocomplete="off" value="$!currentUser.profession"></td>
+        </tr>
+        <tr>
+            <td>职务：</td>
+            <td><input type="text" name="position" autocomplete="off" value="$!currentUser.position"></td>
+        </tr>
+        <tr>
+            <td>职称：</td>
+            <td><input type="text" name="professional_title" autocomplete="off" value="$!currentUser.professionalTitle"></td>
+        </tr>
+        <tr>
+            <td>电子邮件：</td>
+            <td><input type="text" name="email" autocomplete="off" value="$!currentUser.email"></td>
+        </tr>
+        <tr>
+            <td>手机号码：</td>
+            <td><input type="text" name="phone" autocomplete="off" value="$!currentUser.phone"></td>
+        </tr>
+        <tr>
+            <td>固定电话：</td>
+            <td><input type="text" name="telephone" autocomplete="off" value="$!currentUser.telephone"></td>
+        </tr>
+        <tr>
+            <td>传真：</td>
+            <td><input type="text" name="fax" autocomplete="off" value="$!currentUser.fax"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="修改" onclick="updateUserInfo()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+
+    var updateUserInfoXhr;
+    function updateUserInfo() {
+        if (updateUserInfoXhr) updateUserInfoXhr.abort();
+        updateUserInfoXhr = $.ajax({
+            url: "/api/user/update",
+            type: "post",
+            data: $("#user-update-info-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    $("#curentuser-realname").text($("#user-update-info-form").find("input[name=realname]").val());
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

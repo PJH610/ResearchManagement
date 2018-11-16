@@ -1,0 +1,42 @@
+<h3>课题管理申报通知管理</h3>
+<form id="subject-opentime-update-form">
+    <table>
+        <tr>
+            <td>年度和名称：</td>
+            <td><input type="text" autocomplete="off" name="desc" value="$!opentime.desc"></td>
+        </tr>
+        <tr>
+            <td>开始时间：</td>
+            <td><input type="date" name="start_time" value="$!dateTool.format('yyyy-MM-dd',$opentime.startTime)"></td>
+        </tr>
+        <tr>
+            <td>结束时间：</td>
+            <td><input type="date" name="end_time" value="$!dateTool.format('yyyy-MM-dd',$opentime.endTime)"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="确认修改" onclick="opentimeUpdate()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function opentimeUpdate() {
+        $.ajax({
+            url: "/api/subject/opentime/update",
+            type: "post",
+            data: $("#subject-opentime-update-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,53 @@
+<span>活动列表</span>
+<table id="activity-list-table"></table>
+<div id="activity-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getActivityList($pageNum);
+    });
+
+    var activityListXhr;
+    function getActivityList(pageNum) {
+        if (activityListXhr) activityListXhr.abort();
+        activityListXhr = $.ajax({
+            url: "/api/activity/list/official",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="theme">' + list[x].theme + '</td>'
+                            + '<td class="author">' + list[x].author + '</td>'
+                            + '<td class="date">' + list[x].date + '</td>'
+                            + '<td class="click">' + list[x].click + '</td>'
+                            + '<td><a data-url="/activity/' + list[x].id + '/show" onclick="openPage(this)">浏览</a></td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>主题</th>'
+                        + '<th>发布</th>'
+                        + '<th>日期</th>'
+                        + '<th>点击率</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#activity-list-table").html(headTr + tr);
+
+                    initPage($("#activity-list-page"), data, getActivityList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+</script>

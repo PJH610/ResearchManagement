@@ -1,0 +1,74 @@
+[
+  {
+    "title":"我的课题",
+    "child":[
+      {
+        "title":"通知公告",
+        "url":"/notice/list"
+      },{
+        "title":"我的课题",
+        "url":"/subject/list/mine"
+      },{
+        "title":"课题申报",
+        "url":"/subject/host"
+      },{
+        "title":"开题报告",
+        "url":"/subject/thesis/list/host"
+      },{
+        "title":"中期自评",
+        "url":"/subject/medium/list/host"
+      },{
+        "title":"重要变更",
+        "url":"/subject/change/list"
+      },{
+        "title":"结题申请",
+        "url":"/subject/final/list/host"
+      }
+    ]
+  },
+  {
+    "title": "课题浏览",
+    "child": [
+      {
+        "title": "阳江课题",
+        "url": "/subject/approval/list"
+      },
+      {
+        "title": "备案课题",
+        "url": "/record/list"
+      }
+    ]
+  },
+  {
+    "title": "活动信息",
+    "child": [
+      {
+        "title": "添加活动",
+        "url": "/activity/add"
+      },
+      {
+        "title": "我的活动",
+        "url": "/activity/list/host"
+      },
+      {
+        "title": "活动列表",
+        "url": "/activity/list"
+      }
+    ]
+  },
+  {
+    "title":"系统设置",
+    "child":[
+      {
+        "title":"资料修改",
+        "url":"/user/update/host"
+      },{
+        "title":"密码修改",
+        "url":"/user/update/password"
+      },{
+        "title":"退出系统",
+        "url":"/logout"
+      }
+    ]
+  }
+]

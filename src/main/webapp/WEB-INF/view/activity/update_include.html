@@ -1,0 +1,60 @@
+<span>修改课题活动信息</span>
+<form id="activity-update-form">
+    <input type="hidden" name="id" value="$!activity.id">
+    <table>
+        <tr>
+            <td>主题：</td>
+            <td><input type="text" name="theme" autocomplete="off" value="$!activity.theme"></td>
+        </tr>
+        <tr>
+            <td>课题：</td>
+            <td>
+                <input type="hidden" name="subject_id" value="$!activity.subjectId">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    #foreach($!subject in $!subjects)
+                    <option value="$!subject.id"#if($!activity.subjectId == $!subject.id) selected = "selected"#end>$!subject.name</option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>作者：</td>
+            <td><input type="text" name="author" autocomplete="off" value="$!activity.author"></td>
+        </tr>
+        <tr>
+            <td>时间：</td>
+            <td><input type="date" name="date" autocomplete="off" value="$!dateTool.format('yyyy-MM-dd',$!activity.date)"></td>
+        </tr>
+        <tr>
+            <td>正文：</td>
+            <td><textarea type="text" name="content" autocomplete="off">$!activity.content</textarea></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="提交" onclick="activityUpdate()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function activityUpdate() {
+        $.ajax({
+            url: "/api/activity/update",
+            type: "post",
+            data: $("#activity-update-form").serialize(),
+            dataType: "json",
+            cahce: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/activity/list/host");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

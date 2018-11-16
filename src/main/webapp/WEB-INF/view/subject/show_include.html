@@ -1,0 +1,31 @@
+<psan>课题详细信息</psan>
+#if($subject)
+<p>课题名称：$!subject.name</p>
+<p>课题类别：$!subject.categoryId</p>
+<p>立项编号：$!subject.projectNumber</p>
+<p>立项文号：$!subject.projectReference</p>
+<p>所属学科：$!subject.classificationId</p>
+<p>课题分类：$!subject.subjectClassification</p>
+<p>支持人姓名：$!subject.user.realname</p>
+<p>支持人单位：$!subject.user.unit.name</p>
+<p>年度：$!dateTool.format('yyyy',$!subject.year)</p>
+<p>
+    课题申报：
+    <a href="/subject/show/$!subject.id/main">点击浏览</a>
+    <a>修改信息</a>
+</p>
+<p>
+    开题报告：
+    <a>点击下载</a>
+</p>
+<p>
+    中期报告：
+    <a>点击浏览</a>
+</p>
+<p>
+    结题报告：
+    <a>点击浏览</a>
+    <a>修改信息</a>
+</p>
+<p>结题编号：$!subject.conclusionNumber</p>
+#end

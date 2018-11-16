@@ -1,0 +1,62 @@
+<span>用户列表</span>
+<table id="user-list-table"></table>
+<div id="user-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getUserList(1);
+    });
+
+    var userListXhr;
+    function getUserList(pageNum) {
+        if (userListXhr) userListXhr.abort();
+        userListXhr = $.ajax({
+            url: "/api/user/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].realname + '</td>'
+                            + '<td class="gender">' + list[x].gender.desc + '</td>'
+                            + '<td class="birthday">' + list[x].birthday + '</td>'
+                            + '<td class="position">' + list[x].position + '</td>'
+                            + '<td class="unit">' + list[x].unit.name + '</td>'
+                            + '<td class="education">' + list[x].education + '</td>'
+                            + '<td class="profession">' + list[x].profession + '</td>'
+                            + '<td>'
+                            + '<a data-url="/user/update/info/' + list[x].id + '" onclick="openPage(this)">浏览</a>'
+                            + '<a data-url="/notice/show/' + list[x].id + '" onclick="openPage(this)">删除</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>姓名</th>'
+                        + '<th>性别</th>'
+                        + '<th>出生年月</th>'
+                        + '<th>职务</th>'
+                        + '<th>职称</th>'
+                        + '<th>学历</th>'
+                        + '<th>专业</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#user-list-table").html(headTr + tr);
+
+                    initPage($("#user-list-page"), data, getUserList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+</script>

@@ -1,0 +1,120 @@
+#parse('/subject/final/edit/menu_include.html')
+<h3>课题结题信息</h3>
+<form id="subject-final-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!final.subject.name</td>
+        </tr>
+        <tr>
+            <td>课题主持人：</td>
+            <td>$!final.subject.user.realname</td>
+        </tr>
+        <tr>
+            <td>工作单位：</td>
+            <td>$!final.subject.user.unit.name</td>
+        </tr>
+        <tr>
+            <td>联系地址：</td>
+            <td>$!final.subject.user.address</td>
+        </tr>
+        <tr>
+            <td>邮编：</td>
+            <td>$!final.subject.user.postcode</td>
+        </tr>
+        <tr>
+            <td>电子邮箱：</td>
+            <td>$!final.subject.user.email</td>
+        </tr>
+        <tr>
+            <td>办公电话：</td>
+            <td>$!final.subject.user.telephone</td>
+        </tr>
+        <tr>
+            <td>手机：</td>
+            <td>$!final.subject.user.phone</td>
+        </tr>
+        <tr>
+            <td>原定研究起止时间：</td>
+            <td><input type="date" name="planning_time" value="$!dateTool.format('yyyy-MM-dd',$final.planningTime)"></td>
+        </tr>
+        <tr>
+            <td>原定研究成果形式：</td>
+            <td><input type="text" name="planning_form" value="$!final.planningForm"></td>
+        </tr>
+        <tr>
+            <td>实际完成时间：</td>
+            <td><input type="date" name="end_time" value="$!dateTool.format('yyyy-MM-dd',$final.endTime)"></td>
+        </tr>
+        <tr>
+            <td>申请结题验收时间:</td>
+            <td><input type="date" name="acceptance_time" value="$!dateTool.format('yyyy-MM-dd',$final.acceptanceTime)"></td>
+        </tr>
+        <tr>
+            <td>申请结题验收形式：</td>
+            <td>
+                <input type="radio" name="type" value="1" #if($final.type.value == 1)checked="checked"#end>通讯
+                <input type="radio" name="type" value="2" #if($final.type.value == 2)checked="checked"#end>会议
+            </td>
+        </tr>
+        <tr>
+            <td>最终研究成果名称及形式、内容摘要、成果价值分析（成果限填3项，每项500字以内）：</td>
+            <td><textarea name="achievement">$!final.achievement</textarea></td>
+        </tr>
+        <tr>
+            <td>代表性阶段成果名称及内容摘要（限填3项，每项不超过300字）：</td>
+            <td><textarea name="content">$!final.content</textarea></td>
+        </tr>
+        <tr>
+            <td>成果发表、获奖、推广应用情况（限500字以内）：</td>
+            <td><textarea name="situation">$!final.situation</textarea></td>
+        </tr>
+        <tr>
+            <td>重要变更说明：</td>
+            <td><textarea name="changes">$!final.changes</textarea></td>
+        </tr>
+        <tr>
+            <td>成果资料上传：</td>
+            <td>
+                #if($final.file)
+                <a href="$!final.file.fileUri">$!final.file.filename</a>
+                #end
+                <input type="file" name="file">
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="返回" data-url="/subject/final/list/host" onclick="openPage(this)">
+    <input type="button" value="下一步" onclick="subjectFinalUpdate('/subject/$!subjectId/final/edit/personnel')">
+</form>
+<script type="text/javascript">
+
+    function subjectFinalUpdate(skipUrl) {
+        $.ajax({
+            url: "/api/subject/final/update",
+            type: "post",
+            data: new FormData($("#subject-final-update-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    if (skipUrl) {
+                        openUrl(skipUrl);
+                    } else {
+                        alert(result.msg);
+                    }
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

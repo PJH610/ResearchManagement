@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectFundDao">
+
+    <insert id="insert" parameterType="com.zhuoyue.researchManement.bean.SubjectFund" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO tb_subjects_funds(subject_id,data,travel,meeting,equipment,service,print,identification,other,funding,selfraised,budgets)
+        VALUES (#{subjectId},#{data},#{travel},#{meeting},#{equipment},#{service},#{print},#{identification},#{other},#{funding},#{selfraised},#{budgets})
+    </insert>
+
+    <select id="list" parameterType="com.zhuoyue.researchManement.bean.SubjectFund" resultType="com.zhuoyue.researchManement.bean.SubjectFund">
+        SELECT * FROM tb_subjects_funds
+    </select>
+
+    <select id="selectBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectFund" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_funds WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId" parameterType="com.zhuoyue.researchManement.bean.SubjectFund">
+        UPDATE tb_subjects_funds
+        <set>
+            <if test="data != null">data=#{data},</if>
+            <if test="travel != null">travel=#{travel},</if>
+            <if test="meeting != null"> meeting=#{meeting},</if>
+            <if test="equipment != null"> equipment=#{equipment},</if>
+            <if test="service != null"> service=#{service},</if>
+            <if test="print != null">print=#{print},</if>
+            <if test="identification != null">identification=#{identification},</if>
+            <if test="other != null">other=#{other},</if>
+            <if test="funding != null">funding=#{funding},</if>
+            <if test="selfraised != null">selfraised=#{selfraised},</if>
+            <if test="budgets != null">budgets=#{budgets}</if>
+        </set>
+        WHERE subject_id=#{subjectId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

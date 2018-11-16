@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>SubjectBudget接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/subject/budget/add">/api/subject/budget/add</a></p>
+        <p>描述：添加经费年度预算接口</p>
+        <p>参数：subject(课题，关联课题表，不为空)，year(年度，不为空)，money(经费预算，不为空) </p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/budget/list">/api/subject/budget/list</a></p>
+        <p>描述：查看经费年度预算列表</p>
+        <p>参数：page_num(默认为第一页，可为空)，page_size(默认为10条数据，可为空) </p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/budget/show/">/api/subject/budget/show/{id}</a></p>
+        <p>描述：根据id查看经费年度</p>
+        <p>参数：id (主键，不为空)</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/budget/update">/api/subject/budget/update</a></p>
+        <p>描述：根据id修改内容参数</p>
+        <p>参数：id(主键，关联课题表，不为空)，subject(课题，关联课题表，不为空)，year(年度，不为空)，money(经费预算，不为空) </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/budget/delete">/api/subject/budget/delete</a></p>
+        <p>描述：根据传入id删除对应的课题进度</p>
+        <p>参数：id </p>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,61 @@
+#parse('/subject/show/menu_include.html')
+<h3>经费预算</h3>
+<table>
+    <tr>
+        <td>资料费：</td>
+        <td>$!fund.data</td>
+    </tr>
+    <tr>
+        <td>国内调研差旅费：</td>
+        <td>$!fund.travel</td>
+    </tr>
+    <tr>
+        <td>会议费：</td>
+        <td>$!fund.meeting</td>
+    </tr>
+    <tr>
+        <td>设备、耗材费：</td>
+        <td>$!fund.equipment</td>
+    </tr>
+    <tr>
+        <td>劳务及咨询费：</td>
+        <td>$!fund.service</td>
+    </tr>
+    <tr>
+        <td>成果出版及印刷费：</td>
+        <td>$!fund.print</td>
+    </tr>
+    <tr>
+        <td>结题鉴定费：</td>
+        <td>$!fund.identification</td>
+    </tr>
+    <tr>
+        <td>其它：</td>
+        <td>$!fund.other</td>
+    </tr>
+    <tr>
+        <td>申请资助经费（元）：</td>
+        <td>$!fund.funding</td>
+    </tr>
+    <tr>
+        <td>自筹经费（元）：</td>
+        <td>$!fund.selfraised</td>
+    </tr>
+    <tr>
+        <td>经费合计（元）：</td>
+        <td>$!fund.total</td>
+    </tr>
+    <tr>
+        <td>经费年度预算（元）：</td>
+        <td>
+            <table>
+                #foreach($budget in $fund.budgets)
+                <tr>
+                    <td>$!dateTool.format('yyyy年',$budget.year)</td>
+                    <td>$!budget.money</td>
+                </tr>
+                #end
+            </table>
+        </td>
+    </tr>
+</table>

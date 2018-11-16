@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.UserDao">
+
+    <resultMap id="userResultMap" type="com.zhuoyue.researchManement.bean.User">
+        <id property="id" column="id" />
+        <result property="uname" column="uname" />
+        <result property="realname" column="realname" />
+        <result property="password" column="password" />
+        <result property="gender" column="gender" />
+        <result property="ethinic" column="ethic" />
+        <result property="birthday" column="birthday" />
+        <result property="address" column="address" />
+        <result property="email" column="email" />
+        <result property="position" column="position" />
+        <result property="professionalTitle" column="professional_title" />
+        <result property="phone" column="phone" />
+        <result property="telephone" column="telephone" />
+        <result property="education" column="education" />
+        <result property="profession" column="profession" />
+        <result property="lastlogin" column="lastlogin" />
+        <result property="fax" column="fax" />
+        <result property="degree" column="degree" />
+        <result property="postcode" column="postcode" />
+        <result property="roleType" column="role_Type" />
+        <association property="unit" column="unit_id" select="selectUnitById" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuoyue.researchManement.bean.User">
+        INSERT INTO tb_users (uname,realname,password,gender,ethnic,birthday,address,unit_id,email,position,professional_title,phone,telephone,education,profession,lastlogin,fax,degree,postcode,role_type)
+        VALUES(#{uname},#{realname},#{password},#{gender},#{ethnic},#{birthday},#{address},#{unit.id},#{email},#{position},#{professionalTitle},#{phone},#{telephone},#{education},#{profession},#{lastlogin},#{fax},#{degree},#{postcode},#{roleType})
+    </insert>
+
+    <select id="list" resultMap="userResultMap">
+        SELECT * FROM tb_users
+        <if test="roleType != null and roleType.length > 0">
+            WHERE role_type IN
+            <foreach item="item" index="index" collection="roleType" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectById" resultMap="userResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_users WHERE id=#{id}
+    </select>
+
+    <select id="selectByUname" resultMap="userResultMap" parameterType="java.lang.String">
+        SELECT * FROM tb_users WHERE uname=#{uname}
+    </select>
+
+    <select id="selectUnitById" resultType="com.zhuoyue.researchManement.bean.Unit" parameterType="java.lang.Long">
+        SELECT * FROM tb_unit WHERE id=#{unit_id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.User">
+        UPDATE tb_users
+        <set>
+            <if test="realname != null">realname=#{realname},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="gender != null">gender=#{gender},</if>
+            <if test="ethnic != null">ethnic=#{ethnic},</if>
+            <if test="unit != null and unit.id != null">unt_id=#{unit.id},</if>
+            <if test="birthday != null">birthday=#{birthday},</if>
+            <if test="email != null">email=#{email},</if>
+            <if test="position != null">position=#{position},</if>
+            <if test="professionalTitle != null">professional_title=#{professionalTitle},</if>
+            <if test="phone != null">phone=#{phone},</if>
+            <if test="telephone != null">telephone=#{telephone},</if>
+            <if test="fax != null">fax=#{fax},</if>
+            <if test="education != null">education=#{education},</if>
+            <if test="degree != null">degree=#{degree},</if>
+            <if test="profession != null">profession=#{profession},</if>
+            <if test="postcode != null">postcode=#{postcode},</if>
+            <if test="address != null">address=#{address}</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_users WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

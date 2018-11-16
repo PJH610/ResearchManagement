@@ -1,0 +1,54 @@
+#parse('/subject/edit/menu_include.html')
+<h3>研究工作进度列表</h3>
+<a onclick="openUrl('/subject/$!subjectId/edit/schedule/add')">添加</a>
+<table data-subject_id="$!subjectId">
+    <tr>
+        <th>阶段研究开始时间</th>
+        <th>阶段研究结束时间</th>
+        <th>主要工作内容</th>
+        <th>阶段成果名称及形式</th>
+        <th>负责人</th>
+        <th>操作</th>
+    </tr>
+    #foreach($schedule in $schedules)
+    <tr data-id="$!schedule.id">
+        <td>$!dateTool.format('yyyy/MM/dd',$schedule.startTime)</td>
+        <td>$!dateTool.format('yyyy/MM/dd',$schedule.endTime)</td>
+        <td>$!schedule.content</td>
+        <td>$!schedule.name</td>
+        <td>$!schedule.host</td>
+        <td>
+            <a data-url="/subject/$!subjectId/edit/schedule/$!schedule.id/edit" onclick="openPage(this)">修改</a>
+            <a onclick="subjectScheduleDelete(this)">删除</a>
+        </td>
+    </tr>
+    #end
+</table>
+<input type="button" value="返回" data-url="/subject/host" onclick="openPage(this)">
+<input type="button" value="上一步" data-url="/subject/$!subjectId/edit/feasibility" onclick="openPage(this)">
+<input type="button" value="下一步" data-url="/subject/$!subjectId/edit/result" onclick="openPage(this)">
+<script type="text/javascript">
+    function subjectScheduleDelete(item) {
+        var tr = $(item).closest("tr");
+        $.ajax({
+            url: "/api/subject/schedule/delete",
+            type: "post",
+            data: "subject_id=" + tr.closest("table").data("subject_id") + "&id=" + tr.data("id"),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    tr.remove();
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,33 @@
+<span>备案课题</span>
+<p>课题名称：$!record.name</p>
+<p>主持人单位：$!record.unit</p>
+<p>主持人姓名：$!record.host</p>
+<p>立项编号：$!record.pronum</p>
+<p>立项文号：$!record.filenum</p>
+<p>所属学科：$!record.subject</p>
+<p>课题类别：$!record.classification</p>
+<p>立项年度：$!dateTool.format('yyyy',$!record.year)</p>
+<p>
+    开题报告：
+#if($record.thesisProposal)
+    <a href="$!record.thesisProposal.fileUri" target="_blank">$!record.thesisProposal.filename</a>
+#else
+    未上传
+#end
+</p>
+<p>
+    中期报告：
+#if($record.mediumReport)
+    <a href="$!record.mediumReport.fileUri" target="_blank">$!record.mediumReport.filename</a>
+#else
+    未上传
+#end
+</p>
+<p>
+    结题报告：
+#if($record.finalReport)
+    <a href="$!record.finalReport.fileUri" target="_blank">$!record.finalReport.filename</a>
+#else
+    未上传
+#end
+</p>

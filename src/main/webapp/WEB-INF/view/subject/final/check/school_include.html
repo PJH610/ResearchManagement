@@ -1,0 +1,61 @@
+<h3>单位负责人意见</h3>
+<form id="subject-final-check-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!finalApproval.subject.name</td>
+        </tr>
+        <tr>
+            <td>单位负责人姓名：</td>
+            <td><input type="text" autocomplete="off" name="leader_name" value="$!currentUser.realname"></td>
+        </tr>
+        <tr>
+            <td>签署时间：</td>
+            <td>
+                <input type="hidden" name="check_time" value="$!dateTool.format('yyyy-MM-dd',$currentTime)">
+                <input type="date" disabled="disabled" value="$!dateTool.format('yyyy-MM-dd',$currentTime)">
+            </td>
+        </tr>
+        <tr>
+            <td>是否同意推荐：</td>
+            <td>
+                <input type="hidden" name="check" value="">
+                <select onchange="$(this).siblings('input').val($(this).val());">
+                    <option value="">请选择</option>
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>推荐意见：</td>
+            <td><textarea name="note">$!finalApproval.schoolNote</textarea></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectFinalCheck()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectFinalCheck() {
+        $.ajax({
+            url: "/api/subject/final/approval/check",
+            type: "post",
+            data: $("#subject-final-check-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/final/list/school");
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

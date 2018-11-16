@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.ActivityDao">
+
+    <resultMap id="Activity" type="com.zhuoyue.researchManement.bean.Activity">
+        <id column="id" property="id"/>
+        <result column="theme" property="theme"/>
+        <result column="subject_id" property="subjectId"/>
+        <result column="author" property="author"/>
+        <result column="date" property="date"/>
+        <result column="content" property="content"/>
+        <result column="state" property="state"/>
+        <result column="click" property="click" />
+        <association property="subject" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectDao.selectById" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhuoyue.researchManement.bean.Activity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_activity(theme,subject_id,author,date,content,state,click)
+        VALUES (#{theme},#{subjectId},#{author},#{date},#{content},#{state},#{click})
+    </insert>
+
+    <select id="list" resultMap="Activity">
+        SELECT a.* FROM tb_activity a INNER JOIN tb_subjects s ON a.subject_id=s.id INNER JOIN tb_users u on s.user_id=u.id
+        <where>
+            <if test="keyword != null">AND a.theme LIKE #{keyword}'%'</if>
+            <if test="subjectId != null">AND a.subject_id=#{subjectId}</if>
+            <if test="userId != null">AND s.user_id=#{userId}</if>
+            <if test="unitIds != null">
+                AND u.unit_id IN
+                <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="states != null">
+                AND a.state IN
+                <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY a.id DESC
+    </select>
+
+    <select id="mylist" parameterType="java.lang.Long" resultMap="Activity">
+        SELECT * FROM tb_activity n
+        WHERE n.id=#{id}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="Activity">
+        SELECT * FROM tb_activity n LEFT JOIN tb_subjects u ON n.subject_id=u.id
+        WHERE n.id=#{id}
+    </select>
+
+    <update id="updateById">
+        UPDATE tb_activity
+        <set>
+            <if test="activity.theme != null">theme=#{activity.theme},</if>
+            <if test="activity.subjectId != null">subject_id=#{activity.subjectId},</if>
+            <if test="activity.author != null">author=#{activity.author},</if>
+            <if test="activity.date != null">date=#{activity.date},</if>
+            <if test="activity.content != null">content=#{activity.content},</if>
+            <if test="activity.state !=  null">state=#{activity.state}</if>
+        </set>
+        WHERE id=#{activity.id}
+        <if test="states != null">
+            AND state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="setActivityCourread" parameterType="java.util.Map" >
+        <!--注意只有查询才有resultType -->
+        <foreach item="value" index="key" collection="map" separator=";" >
+            UPDATE tb_activity SET click=#{value}+click
+            WHERE id=#{key}
+        </foreach>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_activity WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

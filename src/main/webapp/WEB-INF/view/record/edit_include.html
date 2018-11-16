@@ -1,0 +1,109 @@
+<span>修改课题3</span>
+<form id="record-update-form" action="/api/record/update" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="$!record.id">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td><input type="text" name="name" autocomplete="off" value="$!record.name"></td>
+        </tr>
+        <tr>
+            <td>立项年度：</td>
+            <td><input type="text" name="year" autocomplete="off" value="$!dateTool.format('yyyy',$!record.year)"></td>
+        </tr>
+        <tr>
+            <td>主持人名称：</td>
+            <td><input type="text" name="host" autocomplete="off" value="$!record.host"></td>
+        </tr>
+        <tr>
+            <td>主持人单位：</td>
+            <td><input type="text" name="unit" autocomplete="off" value="$!record.unit"></td>
+        </tr>
+        <tr>
+            <td>立项编号：</td>
+            <td><input type="text" name="pronum" autocomplete="off" value="$!record.pronum"></td>
+        </tr>
+        <tr>
+            <td>立项文号：</td>
+            <td><input type="text" name="filenum" autocomplete="off" value="$!record.filenum"></td>
+        </tr>
+        <tr>
+            <td>所属学科：</td>
+            <td><input type="text" name="subject" autocomplete="off" value="$!record.subject"></td>
+        </tr>
+        <tr>
+            <td>课题类别：</td>
+            <td><input type="text" name="classification" autocomplete="off" value="$!record.classification"></td>
+        </tr>
+        <tr>
+            <td>开题报告：</td>
+            <td>
+                #if($!record.thesisProposal)
+                <a href="$!record.thesisProposal.fileUri">$!record.thesisProposal.filename</a>
+                #end
+                <input type="file" name="thesis_proposal">
+            </td>
+        </tr>
+        <tr>
+            <td>中期报告：</td>
+            <td>
+                #if($!record.mediumReport)
+                <a href="$!record.mediumReport.fileUri">$!record.mediumReport.filename</a>
+                #end
+                <input type="file" name="medium_report">
+            </td>
+        </tr>
+        <tr>
+            <td>结题报告：</td>
+            <td>
+                #if($!record.finalReport)
+                <a href="$!record.finalReport.fileUri">$!record.finalReport.filename</a>
+                #end
+                <input type="file" name="final_report">
+            </td>
+        </tr>
+        <tr>
+            <td><input type="button" value="提交" onclick="recordUpdate()"></td>
+            <!--<td><input type="submit" value="提交" ></td>-->
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function recordUpdate() {
+        // $("#record-update-form").ajaxSubmit({
+        //     url: '/api/record/update', // 需要提交的 url
+        //     type: 'post', // 提交方式 get/post
+        //     dataType: "json", /*设置返回值类型为文本*/
+        //     success: function (result) { // data 保存提交后返回的数据，一般为 json 数据
+        //         alert(result.msg);
+        //         if (result.code == 200) {
+        //             window.location.href = "/record/list/city";
+        //         }
+        //     },
+        //     error: function (error) {
+        //         alert("网络连接出错！");
+        //     }
+        // });
+
+        $.ajax({
+            url: "/api/record/update",
+            type: "post",
+            data: new FormData($("#record-update-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    window.location.href = "/record/list/city";
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,77 @@
+<span>添加课题</span>
+<form id="record-add-form">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td><input type="text" name="name" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>立项年度：</td>
+            <td><input type="text" name="year" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>主持人名称：</td>
+            <td><input type="text" name="host" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>主持人单位：</td>
+            <td><input type="text" name="unit" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>立项编号：</td>
+            <td><input type="text" name="pronum" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>立项文号：</td>
+            <td><input type="text" name="filenum" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>所属学科：</td>
+            <td><input type="text" name="subject" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>课题类别：</td>
+            <td><input type="text" name="classification" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>开题报告：</td>
+            <td><input type="file" name="thesis_proposal"></td>
+        </tr>
+        <tr>
+            <td>中期报告：</td>
+            <td><input type="file" name="medium_report"></td>
+        </tr>
+        <tr>
+            <td>结题报告：</td>
+            <td><input type="file" name="final_report"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="提交" onclick="recordAdd()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function recordAdd() {
+        $.ajax({
+            url: "/api/record/add",
+            type: "post",
+            data: new FormData($("#record-add-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    window.location.href = "/record/list/city";
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

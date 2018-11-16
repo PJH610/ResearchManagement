@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectBudgetDao">
+
+    <insert id="insert" parameterType="com.zhuoyue.researchManement.bean.SubjectBudget" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO tb_subjects_budget(subject,year,money)
+        VALUES (#{subject},#{year},#{money})
+    </insert>
+
+    <select id="list" parameterType="com.zhuoyue.researchManement.bean.SubjectBudget" resultType="com.zhuoyue.researchManement.bean.SubjectBudget">
+        SELECT * FROM tb_subjects_budget
+    </select>
+
+    <select id="selectById" resultType="com.zhuoyue.researchManement.bean.SubjectBudget" parameterType="java.lang.Long">
+        SELECT * FROM tb_subjects_budget WHERE id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.zhuoyue.researchManement.bean.SubjectBudget">
+        UPDATE tb_subjects_budget
+        <set>
+            <if test="year != null">year=#{year},</if>
+            <if test="money != null">money=#{money}</if>
+        </set>
+        WHERE id=#{id}
+
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

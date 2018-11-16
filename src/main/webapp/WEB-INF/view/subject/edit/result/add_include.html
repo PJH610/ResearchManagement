@@ -1,0 +1,47 @@
+<h3>添加预期研究成果信息</h3>
+<form id="subject-result-add-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>负责人：</td>
+            <td><input type="text" autocomplete="off" name="principal"></td>
+        </tr>
+        <tr>
+            <td>完成时间：</td>
+            <td><input type="date" name="completetime"></td>
+        </tr>
+        <tr>
+            <td>最终成果名称：</td>
+            <td><input type="text" autocomplete="off" name="finalresult_name"></td>
+        </tr>
+        <tr>
+            <td>最终成果形式：</td>
+            <td><input type="text" autocomplete="off" name="finalresult_shape"></td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="提交" onclick="subjectResultAdd()">
+<input type="button" value="返回" onclick="history.go(-1);">
+<script type="text/javascript">
+    function subjectResultAdd() {
+        $.ajax({
+            url: "/api/subject/result/add",
+            type: "post",
+            data: $("#subject-result-add-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/edit/result");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

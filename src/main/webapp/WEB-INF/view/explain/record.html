@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>备案接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/record/add">/api/record/add</a></p>
+        <p>描述：添加接口</p>
+        <p>参数：name(课题名称)，host(主持人姓名)，unit(主持人单位)，year(立项年度，格式："yyyy")，pronum(立项编号)，filenum(立项文号)，subject(所属学科)，classification(课题类别)，thesis_proposal(开题报告,可为空)，
+            medium_report(中期报告，可为空)，final_report(结题报告，可为空)
+        </p>
+        <form action="/api/record/add" method="post" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>课题名称:</td>
+                    <td><input type="text" name="name"/></td>
+                </tr>
+                <tr>
+                    <td>主持人姓名：</td>
+                    <td><input type="text" name="host"/></td>
+                </tr>
+                <tr>
+                    <td>主持人单位:</td>
+                    <td><input type="text" name="unit"/></td>
+                </tr>
+                <tr>
+                    <td>立项年度:</td>
+                    <td><input type="text" name="year"/></td>
+                </tr>
+                <tr>
+                    <td>立项编号：</td>
+                    <td><input type="text" name="pronum"/></td>
+                </tr>
+                <tr>
+                    <td>立项文号：</td>
+                    <td><input type="text" name="filenum"/></td>
+                </tr>
+                <tr>
+                    <td>所属学科：</td>
+                    <td><input type="text" name="subject"/></td>
+                </tr>
+                <tr>
+                    <td>课题类别：</td>
+                    <td><input type="text" name="classification"/></td>
+                </tr>
+                <tr>
+                    <td>开题报告:</td>
+                    <td><input type="file" name="thesis_proposal"/></td>
+                </tr>
+                <tr>
+                    <td>中期报告：</td>
+                    <td><input type="file" name="medium_report"/></td>
+                </tr>
+                <tr>
+                    <td>结题报告：</td>
+                    <td><input type="file" name="final_report"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交" /></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>GET：<a href="/api/record/list">/api/record/list</a></p>
+        <p>描述：数据显示</p>
+        <p>参数：page_num(默认为第一页，可为空)，page_size(默认为10条数据，可为空),name(模糊查询，可为空)</p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/record/show/{id}">/api/record/show/{id}</a></p>
+        <p>描述：查询单条数据</p>
+        <p>参数：id</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/record/update">/api/record/update</a></p>
+        <p>描述：修改课题接口</p>
+        <p>
+            参数：id(备案课题ID)，name(课题名称)，host(主持人姓名)，unit(主持人单位)，year(立项年度，格式："yyyy")，pronum(立项编号)，filenum(立项文号)，subject(所属学科)，classification(课题类别)，thesis_proposal(开题报告,可为空)，
+            medium_report(中期报告，可为空)，final_report(结题报告，可为空)
+        </p>
+        <form action="/api/record/update" method="post"  enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>id:</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td>课题名称:</td>
+                    <td><input type="text" name="name"/></td>
+                </tr>
+                <tr>
+                    <td>主持人姓名：</td>
+                    <td><input type="text" name="host"/></td>
+                </tr>
+                <tr>
+                    <td>主持人单位:</td>
+                    <td><input type="text" name="unit"/></td>
+                </tr>
+                <tr>
+                    <td>立项年度:</td>
+                    <td><input type="text" name="year"/></td>
+                </tr>
+                <tr>
+                    <td>立项编号：</td>
+                    <td><input type="text" name="pronum"/></td>
+                </tr>
+                <tr>
+                    <td>立项文号：</td>
+                    <td><input type="text" name="filenum"/></td>
+                </tr>
+                <tr>
+                    <td>所属学科：</td>
+                    <td><input type="text" name="subject"/></td>
+                </tr>
+                <tr>
+                    <td>课题类别：</td>
+                    <td><input type="text" name="classification"/></td>
+                </tr>
+                <tr>
+                    <td>开题报告:</td>
+                    <td><input type="file" name="thesis_proposal"/></td>
+                </tr>
+                <tr>
+                    <td>中期报告：</td>
+                    <td><input type="file" name="medium_report"/></td>
+                </tr>
+                <tr>
+                    <td>结题报告：</td>
+                    <td><input type="file" name="final_report"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交" /></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+    <li>
+        <p>GET：<a href="/api/record/delete">/api/record/delete</a></p>
+        <p>描述：单个删除和批量删除</p>
+        <p>参数：id</p>
+        <form action="/api/record/delete" method="post"  enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>id:</td>
+                    <td><input type="text" name="id"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="提交" /></td>
+                </tr>
+            </table>
+        </form>
+    </li>
+</ul>
+</body>
+</html>

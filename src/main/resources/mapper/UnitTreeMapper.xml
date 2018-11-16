@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.UnitTreeDao">
+
+    <resultMap id="unitResultMap" type="com.zhuoyue.researchManement.bean.UnitTree">
+        <id property="id" column="id" />
+        <result property="parentId" column="parent_id" />
+        <result property="unitId" column="unit_id" />
+        <result property="level" column="level" />
+        <result property="sort" column="sort" />
+        <collection property="child" column="{unit_id=unit_id,level=level}" select="listChild" />
+    </resultMap>
+
+    <resultMap id="areaResultMap" type="com.zhuoyue.researchManement.bean.Area">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="active" column="active" />
+        <collection property="units" column="id" select="listUnitByAreaId" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuoyue.researchManement.bean.UnitTree">
+        INSERT INTO tb_unit_tree(parent_id,unit_id,level,sort) VALUES(#{parentId},#{unitId},#{level},#{sort})
+    </insert>
+
+    <select id="selectByUnitId" resultMap="unitResultMap" parameterType="java.lang.Long">
+        SELECT * FROM tb_unit_tree WHERE
+        <choose>
+            <when test="unitId != null">unit_id=#{unitId}</when>
+            <otherwise>unit_id IS NULL</otherwise>
+        </choose>
+        LIMIT 1
+    </select>
+
+    <select id="listChild" resultType="com.zhuoyue.researchManement.bean.Unit">
+        SELECT u.* FROM tb_unit_tree ut LEFT JOIN tb_unit u ON ut.unit_id=u.id WHERE
+        <choose>
+            <when test="unit_id != null">ut.parent_id=#{unit_id}</when>
+            <otherwise>ut.parent_id IS NULL</otherwise>
+        </choose>
+        AND ut.level=#{level}+1
+    </select>
+
+    <select id="listUnitIdByParentId" resultType="java.lang.Long">
+        SELECT unit_id FROM tb_unit_tree WHERE
+        <choose>
+            <when test="parentId != null">
+                parent_id IN
+                <foreach item="item" index="index" collection="parentId" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>parent_id IS NULL</otherwise>
+        </choose>
+    </select>
+
+    <select id="listArea" resultMap="areaResultMap">
+        SELECT * FROM tb_area
+    </select>
+
+    <select id="listUnitByAreaId" resultType="com.zhuoyue.researchManement.bean.Unit" parameterType="java.lang.Long">
+        SELECT * FROM tb_unit WHERE area_id=#{id} AND active=true
+    </select>
+
+    <update id="updateByUnitId" parameterType="com.zhuoyue.researchManement.bean.UnitTree">
+        UPDATE tb_unit_tree SET sort=#{sort} WHERE unit_id=#{unitId}
+    </update>
+
+    <delete id="deleteByUnitId">
+        DELETE FROM tb_unit_tree WHERE unit_id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

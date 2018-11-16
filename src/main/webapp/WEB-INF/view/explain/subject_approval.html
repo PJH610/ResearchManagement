@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>教育局（科研办）审批意见说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>GET：<a href="/api/subject/approval/show/{id}">/api/subject/approval/show/{subject_id}</a></p>
+        <p>描述：根据课题id查询接口</p>
+        <p>参数：subject_id</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/approval/check">/api/subject/approval/check</a></p>
+        <p>描述：学校管理员/区科研办管理员点评</p>
+        <p>参数：subject_id(课题id)，check(是否推荐，true/false)，school_leader_name(单位负责人姓名)，school_note(单位审核意见)
+            school_check_time(区教育科研管理部门负责人姓名，格式：'yyyy-MM-dd')
+        </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/approval/delete">/api/subject/approval/delete</a></p>
+        <p>描述：根据id修改内容(可批量删除)</p>
+        <p>参数：id </p>
+    </li>
+</ul>
+</body>
+</html>

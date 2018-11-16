@@ -1,0 +1,118 @@
+<h3>更变记录列表</h3>
+<table id="subject-change-list-table" data-subject_id="$!subjectId"></table>
+<script type="text/javascript">
+    $(function () {
+        getSubjectChangeList();
+    });
+
+    var subjectChangeListXhr;
+    function getSubjectChangeList() {
+        if (subjectChangeListXhr) subjectChangeListXhr.abort();
+        subjectChangeListXhr = $.ajax({
+            url: "/api/subject/change/list/$!subjectId",
+            type: "get",
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var list = result.data;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td>' + list[x].subject.name + '</td>'
+                            + '<td>' + list[x].type.desc + '</td>'
+                            + '<td>' + beforeChange(list[x]) + '</td>'
+                            + '<td>' + afterChange(list[x]) + '</td>'
+                            + '<td>'
+                            + initUpdate(list[x].subject.id,list[x].id,list[x].type.value)
+                            + '<a onclick="subjectChangeDelete(this)">删除</a>'
+                            + '</td>'
+                            + '<td>' + list[x].state.desc + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>名称</th>'
+                        + '<th>更变内容</th>'
+                        + '<th>更变前</th>'
+                        + '<th>更变后</th>'
+                        + '<th>操作</th>'
+                        + '<th>审批结果</th>'
+                        + '</tr>';
+                    $("#subject-change-list-table").html(headTr + tr);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function beforeChange(change) {
+        switch (change.type.value) {
+            case 1:
+                break;
+            case 2:
+                return change.subject.complete_time;
+            case 3:
+                return change.subject.finalresult;
+            default:
+                return "";
+        }
+    }
+
+    function afterChange(change) {
+        switch (change.type.value) {
+            case 1:
+                return "";
+            case 2:
+                return change.complete_time;
+            case 3:
+                return change.finalresult;
+            default:
+                return "";
+        }
+    }
+
+    function initUpdate(subjectId,id,type) {
+        switch (type) {
+            case 1:
+                return "";
+            case 2:
+                return '<a data-url="/subject/' + subjectId + '/change/edit/update/' + id + '/completetime" onclick="openPage(this)">修改</a>';
+            case 3:
+                return '<a data-url="/subject/' + subjectId + '/change/edit/update/' + id + '/finalresult" onclick="openPage(this)">修改</a>';
+            default:
+                return "";
+        }
+    }
+
+    function subjectChangeDelete(item) {
+        if (confirm("您确定删除吗?此操作将不能恢复!")) {
+            var tr = $(item).closest("tr");
+            $.ajax({
+                url: "/api/subject/change/delete",
+                type: "post",
+                data: "subject_id=" + tr.closest("table").data("subject_id") + "&id=" + tr.data("id"),
+                dataType: "json",
+                cache: false,
+                beforeSend: function () {
+                },
+                complete: function () {
+                },
+                success: function (result) {
+                    alert(result.msg);
+                    if (result.code == 200) {
+                        tr.remove();
+                    }
+                }, error: function (result) {
+                    alert("网络连接出错！");
+                }
+            });
+        }
+    }
+</script>
+</script>

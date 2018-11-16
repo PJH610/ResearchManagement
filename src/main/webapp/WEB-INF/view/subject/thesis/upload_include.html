@@ -1,0 +1,41 @@
+<h3>提交开题报告</h3>
+<form id="subject-thesis-upload-form">
+    <input type="hidden" name="id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>文件：</td>
+            <td><input type="file" name="thesis_proposal"></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="提交" onclick="thesisUpload()">
+                <input type="button" value="返回" onclick="history.go(-1);">
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function thesisUpload() {
+        $.ajax({
+            url: "/api/subject/thesis/upload",
+            type: "post",
+            data: new FormData($("#subject-thesis-upload-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/thesis/list/city");
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,104 @@
+<h3>课题中期自评信息</h3>
+<table>
+    <tr>
+        <td>课题名称：</td>
+        <td>$!medium.subject.name</td>
+    </tr>
+    <tr>
+        <td>立项编号：</td>
+        <td>$!medium.subject.projectNumber</td>
+    </tr>
+    <tr>
+        <td>立项文号：</td>
+        <td>$!medium.subject.projectReference</td>
+    </tr>
+    <tr>
+        <td>课题负责人：</td>
+        <td>$!medium.subject.user.realname</td>
+    </tr>
+    <tr>
+        <td>联系电话：</td>
+        <td>$!medium.subject.user.phone</td>
+    </tr>
+    <tr>
+        <td>电子邮箱：</td>
+        <td>$medium.subject.user.email</td>
+    </tr>
+    <tr>
+        <td>课题时间、地点及评议专家姓名、变更内容：</td>
+        <td>$!medium.changes</td>
+    </tr>
+    <tr>
+        <td>研究进展情况 - 研究是否有调整？</td>
+        <td>
+            #if($medium.adjust == true)
+            有
+            #elseif($medium.adjust == false)
+            没有
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>研究进展情况 - 研究进度调整的原因：</td>
+        <td>$!medium.adjustReason</td>
+    </tr>
+    <tr>
+        <td>研究进展情况 - 阶段目标达成情况及成果成效简要介绍：</td>
+        <td>$!medium.situation</td>
+    </tr>
+    <tr>
+        <td>经费使用情况 - 立项资助经费：</td>
+        <td>$!medium.funds</td>
+    </tr>
+    <tr>
+        <td>经费使用情况 - 单位配套经费：</td>
+        <td>$!medium.supportingFunds</td>
+    </tr>
+    <tr>
+        <td>经费使用情况 - 已使用经费：</td>
+        <td>$!medium.usedFunds</td>
+    </tr>
+    <tr>
+        <td>经费使用情况 - 附经费使用细目</td>
+        <td>$!medium.fundsDetail</td>
+    </tr>
+    <tr>
+        <td>中期报告上传：</td>
+        <td>
+            #if($medium.file)
+            <a href="$!medium.file.fileUri" target="_blank">$!medium.file.filename</a>
+            #else
+            暂无
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>所在单位是否同意自评意见：</td>
+        <td>$!medium.schoolNote</td>
+    </tr>
+    <tr>
+        <td>科研办负责人签名：</td>
+        <td>$!medium.schoolLeaderName</td>
+    </tr>
+    <tr>
+        <td>签阅时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd日',$medium.schoolCheckTime)</td>
+    </tr>
+    <tr>
+        <td>市教育科研办审核或抽查意见：</td>
+        <td>$!medium.cityNote</td>
+    </tr>
+    <tr>
+        <td>审核人签名：</td>
+        <td>$!medium.cityLeaderName</td>
+    </tr>
+    <tr>
+        <td>签阅时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd日',$medium.cityCheckTime)</td>
+    </tr>
+    <tr>
+        <td>专家指导小组成员点评意见：</td>
+        <td></td>
+    </tr>
+</table>
+<input type="button" value="返回" onclick="history.go(-1);">

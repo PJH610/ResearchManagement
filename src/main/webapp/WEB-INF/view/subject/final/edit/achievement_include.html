@@ -1,0 +1,60 @@
+#parse('/subject/final/edit/menu_include.html')
+<h3>课题阶段成果信息</h3>
+<a data-url="/subject/$!subjectId/final/edit/achievement/add" onclick="openPage(this)">添加</a>
+<table data-subject_id="$!subjectId">
+    <tr>
+        <th>成果名称</th>
+        <th>作者</th>
+        <th>形式</th>
+        <th>字数</th>
+        <th>完成年月</th>
+        <th>出版单位或者发表刊物、刊号</th>
+        <th>获奖、转载、引用和应用情况</th>
+        <th>操作</th>
+    </tr>
+    #foreach($achievement in $achievements)
+    <tr data-id="$!achievement.id">
+        <td>$!achievement.name</td>
+        <td>$!achievement.author</td>
+        <td>$!achievement.form</td>
+        <td>$!achievement.wordNumber</td>
+        <td>$!dateTool.format('yyyy/MM/dd',$achievement.completeTime)</td>
+        <td>$!achievement.journal</td>
+        <td>$!achievement.situation</td>
+        <td>
+            <a data-url="/subject/$!subjectId/final/edit/achievement/$!achievement.id/update" onclick="openPage(this)">修改</a>
+            <a onclick="subjectFinalAchievementDelete(this)">删除</a>
+        </td>
+    </tr>
+    #end
+</table>
+<input type="button" value="返回" data-url="/subject/final/list/host" onclick="openPage(this)">
+<input type="button" value="上一步" data-url="/subject/$!subjectId/final/edit/personnel" onclick="openPage(this)">
+<input type="button" value="下一步" data-url="/subject/$!subjectId/final/edit/fund" onclick="openPage(this)">
+<script type="text/javascript">
+    function subjectFinalAchievementDelete(item) {
+        if (confirm("您确定提交吗？提交后将不能再修改！")) {
+            var tr = $(item).closest("tr");
+            $.ajax({
+                url: "/api/subject/final/achievement/delete",
+                type: "post",
+                data: "subject_id=" + tr.closest("table").data("subject_id") + "&id=" + tr.data("id"),
+                dataType: "json",
+                cache: false,
+                beforeSend: function() {
+                },
+                complete: function() {
+                },
+                success: function (result) {
+                    if (result.code == 200) {
+                        tr.remove();
+                    } else {
+                        alert(result.msg);
+                    }
+                },error: function (result) {
+                    alert("网络连接出错！");
+                }
+            });
+        }
+    }
+</script>

@@ -1,0 +1,59 @@
+<h3>添加重要阶段成果</h3>
+<form id="subject-final-achievement-add-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>成果名称：</td>
+            <td><input type="text" autocomplete="off" name="name"></td>
+        </tr>
+        <tr>
+            <td>作者：</td>
+            <td><input type="text" autocomplete="off" name="author"></td>
+        </tr>
+        <tr>
+            <td>形式：</td>
+            <td><input type="text" autocomplete="off" name="form"></td>
+        </tr>
+        <tr>
+            <td>字数:</td>
+            <td><input type="text" autocomplete="off" name="word_number"></td>
+        </tr>
+        <tr>
+            <td>完成年月:</td>
+            <td><input type="date" name="complete_time"></td>
+        </tr>
+        <tr>
+            <td>出版单位或者发表刊物、刊号：</td>
+            <td><textarea name="journal"></textarea></td>
+        </tr>
+        <tr>
+            <td>获奖、转载、引用和应用情况：</td>
+            <td><textarea name="situation"></textarea></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectFinalAchievementAdd()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectFinalAchievementAdd() {
+        $.ajax({
+            url: "/api/subject/final/achievement/add",
+            type: "post",
+            data: $("#subject-final-achievement-add-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/final/edit/achievement");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,115 @@
+#parse('/subject/edit/menu_include.html')
+<h3>推荐人意见</h3>
+<p>提示：不具有中级（中学一级、小学高级）专业技术职务的课题主持人，应当由两名具有中级及以上职称的同学科教师加具推荐意见，包括对申报人的敬业精神、专业技术能力、专业学习与研究的态度等方面作出评价。</p>
+<form id="subject-recommender-update-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <h3>推荐人一信息</h3>
+    <table>
+        <tr>
+            <td>推荐人一姓名：</td>
+            <td><input type="text" autocomplete="off" name="name" value="$!recommender.name"></td>
+        </tr>
+        <tr>
+            <td>职务/职称：</td>
+            <td><input type="text" autocomplete="off" name="position" value="$!recommender.position"></td>
+        </tr>
+        <tr>
+            <td>学科与专长：</td>
+            <td><input type="text" autocomplete="off" name="profession" value="$!recommender.profession"></td>
+        </tr>
+        <tr>
+            <td>工作单位：</td>
+            <td><input type="text" autocomplete="off" name="unit" value="$!recommender.unit"></td>
+        </tr>
+        <tr>
+            <td>主持过的课题名称与立项单位：</td>
+            <td><textarea name="subname">$!recommender.subname</textarea></td>
+        </tr>
+        <tr>
+            <td>推荐意见：</td>
+            <td><textarea name="recommend">$!recommender.recommend</textarea></td>
+        </tr>
+    </table>
+    <h3>推荐人二信息</h3>
+    <table>
+        <tr>
+            <td>推荐人二姓名：</td>
+            <td><input type="text" autocomplete="off" name="name_s" value="$!recommender.nameS"></td>
+        </tr>
+        <tr>
+            <td>职务/职称：</td>
+            <td><input type="text" autocomplete="off" name="position_s" value="$!recommender.positionS"></td>
+        </tr>
+        <tr>
+            <td>学科与专长：</td>
+            <td><input type="text" autocomplete="off" name="profession_s" value="$!recommender.professionS"></td>
+        </tr>
+        <tr>
+            <td>工作单位：</td>
+            <td><input type="text" autocomplete="off" name="unit_s" value="$!recommender.unitS"></td>
+        </tr>
+        <tr>
+            <td>主持过的课题名称与立项单位：</td>
+            <td><textarea name="subname_s">$!recommender.subnameS</textarea></td>
+        </tr>
+        <tr>
+            <td>推荐意见：</td>
+            <td><textarea name="recommend_s">$!recommender.recommendS</textarea></td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="返回" data-url="/subject/host" onclick="openPage(this)">
+<input type="button" value="上一步" onclick="subjectRecommenderUpdate('/subject/$!subjectId/edit/personnel')">
+<input type="button" value="下一步" onclick="subjectRecommenderUpdate('/subject/$!subjectId/edit/proof')">
+<script type="text/javascript">
+
+    function subjectRecommenderUpdate(skipUrl) {
+        $.ajax({
+            url: "/api/subject/recommender/update",
+            type: "post",
+            data: $("#subject-recommender-update-form").serialize(),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    if (skipUrl) {
+                        openUrl(skipUrl);
+                    } else {
+                        alert(result.msg);
+                    }
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function subjectRecommenderDelete(item) {
+        var tr =$(item).closest("tr");
+        $.ajax({
+            url: "/api/subject/recommender/delete",
+            type: "post",
+            data: "id=" + tr.data("id"),
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    tr.remove();
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

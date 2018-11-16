@@ -1,0 +1,72 @@
+#parse('/subject/show/menu_include.html')
+<form id="subject-personnel-post-form">
+#if($update)
+    <h3>修改课题研究人员信息</h3>
+    <input type="hidden" name="id" value="$!personnel">
+#else
+    <h3>添加课题研究人员信息</h3>
+    <input type="hidden" name="subject_id" value="$!subjectId">
+#end
+    <table>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" autocomplete="off" name="name" value=""></td>
+        </tr>
+        <tr>
+            <td>年龄：</td>
+            <td><input type="text" autocomplete="off" name="age" value=""></td>
+        </tr>
+        <tr>
+            <td>单位：</td>
+            <td><input type="text" autocomplete="off" name="unit" value=""></td>
+        </tr>
+        <tr>
+            <td>任务分工：</td>
+            <td><input type="text" autocomplete="off" name="task" value=""></td>
+        </tr>
+        <tr>
+            <td>职务/职称：</td>
+            <td><input type="text" autocomplete="off" name="position" value=""></td>
+        </tr>
+        <tr>
+            <td>学历/学位：</td>
+            <td><input type="text" autocomplete="off" name="education" value=""></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="提交" onclick="subjectPersonnalPost()">
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+#if($update)
+    var url = "";
+    var redirectUrl = "";
+#else
+    var url = "/api/subject/personnel/add";
+var redirectUrl = "/subject/show/$!subjectId/personnel";
+#end
+
+    function subjectPersonnalPost() {
+        $.ajax({
+            url: url,
+            type: "post",
+            data: $("#subject-personnel-post-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl(redirectUrl);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

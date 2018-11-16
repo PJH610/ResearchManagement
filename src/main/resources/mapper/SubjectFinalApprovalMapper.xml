@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectFinalApprovalDao">
+
+    <resultMap id="finalApprovalResultMap" type="com.zhuoyue.researchManement.bean.SubjectFinalApproval">
+        <id column="id" property="id" />
+        <result column="subject_id" property="subjectId" />
+        <result column="school_note" property="schoolNote" />
+        <result column="school_leader_name" property="schoolLeaderName" />
+        <result column="school_check_time" property="schoolCheckTime" />
+        <result column="area_note" property="areaNote" />
+        <result column="area_leader_name" property="areaLeaderName" />
+        <result column="area_check_time" property="areaCheckTime" />
+        <result column="city_note" property="cityNote" />
+        <result column="city_leader_name" property="cityLeaderName" />
+        <result column="city_check_time" property="cityCheckTime" />
+    </resultMap>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.zhuoyue.researchManement.bean.SubjectFinalApproval">
+        INSERT INTO tb_subjects_final_approval(subject_id,school_note,school_leader_name,school_check,school_check_time,expert_opinion_id,first_trial_opinion,first_trial_leader_name,first_trial_check,first_trial_check_time,final_trial_opinion,final_trial_leader_name,final_trial_check,final_trial_check_time)
+        VALUES (#{subjectId},#{schoolNote},#{schoolLeaderName},#{schoolCheck},#{schoolCheckTime},#{expertOpinion.id},#{firstTrialOpinion},#{firstTrialLeaderName},#{firstTrialCheck},#{firstTrialCheckTime},#{finalTrialOpinion},#{finalTrialLeaderName},#{finalTrialCheck},#{finalTrialCheckTime})
+    </insert>
+
+    <select id="list" resultType="com.zhuoyue.researchManement.bean.SubjectFinalApproval">
+        SELECT * FROM tb_subjects_final_approval
+    </select>
+
+    <select id="selectBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectFinalApproval">
+        SELECT * FROM tb_subjects_final_approval WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId" parameterType="com.zhuoyue.researchManement.bean.SubjectFinalApproval">
+        UPDATE tb_subjects_final_approval sfa INNER JOIN tb_subjects_final sf ON sfa.subject_id=sf.subject_id INNER JOIN tb_subjects s ON sfa.subject_id=s.id INNER JOIN tb_users u on s.user_id=u.id
+        <set>
+            <if test="subjectFinal != null and subjectFinal.state != null">sf.state=#{subjectFinal.state},</if>
+            <if test="finalApproval.schoolNote != null">sfa.school_note=#{finalApproval.schoolNote},</if>
+            <if test="finalApproval.schoolLeaderName != null">sfa.school_leader_name=#{finalApproval.schoolLeaderName},</if>
+            <if test="finalApproval.schoolCheck != null">sfa.school_check=#{finalApproval.schoolCheck},</if>
+            <if test="finalApproval.schoolCheckTime != null">sfa.school_check_time=#{finalApproval.schoolCheckTime},</if>
+            <if test="finalApproval.expertOpinion != null and finalApproval.expertOpinion.id != null">sfa.expert_opinion_id=#{finalApproval.expertOpinion.id},</if>
+            <if test="finalApproval.firstTrialOpinion != null">sfa.first_trial_opinion=#{finalApproval.firstTrialOpinion},</if>
+            <if test="finalApproval.firstTrialLeaderName != null">sfa.first_trial_leader_name=#{finalApproval.firstTrialLeaderName},</if>
+            <if test="finalApproval.firstTrialCheck != null">sfa.first_trial_check=#{finalApproval.firstTrialCheck},</if>
+            <if test="finalApproval.firstTrialCheckTime != null">sfa.first_trial_check_time=#{finalApproval.firstTrialCheckTime},</if>
+            <if test="finalApproval.finalTrialOpinion != null">sfa.final_trial_opinion=#{finalApproval.finalTrialOpinion},</if>
+            <if test="finalApproval.finalTrialLeaderName != null">sfa.final_trial_leader_name=#{finalApproval.finalTrialLeaderName},</if>
+            <if test="finalApproval.finalTrialCheckTime != null">sfa.final_trial_check_time=#{finalApproval.finalTrialCheckTime},</if>
+            <if test="finalApproval.finalTrialCheck != null">sfa.final_trial_check=#{finalApproval.finalTrialCheck},</if>
+        </set>
+        WHERE sfa.subject_id=#{finalApproval.subjectId}
+        <if test="states != null">
+            AND sf.state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="unitIds != null">
+            AND u.unit_id IN
+            <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_final_approval  WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

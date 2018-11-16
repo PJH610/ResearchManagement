@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>登录页面</title>
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/security.js"></script>
+</head>
+<body>
+<form id="login-form">
+    <table>
+        <tr>
+            <td>账号：</td>
+            <td><input type="text" name="uname" autocomplete="off" value="user"></td>
+        </tr>
+        <tr>
+            <td>密码：</td>
+            <td><input type="text" name="password" autocomplete="off" value="123456"></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="登录" onclick="login()">
+            </td>
+        </tr>
+    </table>
+</form>
+<div><a href="/register">注册</a></div>
+<div><a href="/">接口</a></div>
+<script type="text/javascript">
+
+    function login() {
+        $.ajax({
+            url: "/api/user/pubkey",
+            type: "post",
+            dataType: "json",
+            cache: false,
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var login_form = $("#login-form");
+
+                    var pwd = login_form.find("input[name=password]").val();
+                    var modulus = result.data.modulus;
+                    var exponent = result.data.exponent;
+
+                    //加密
+                    var key = RSAUtils.getKeyPair(exponent, "", modulus);
+                    var apwd = RSAUtils.encryptedString(key, JSON.stringify({"password":pwd}));
+
+                    $.ajax({
+                        url: "/api/user/login",
+                        type: "post",
+                        data: "uname=" + login_form.find("input[name=uname]").val() + "&password=" + apwd,
+                        dataType: "json",
+                        cache: false,
+                        beforeSend: function() {
+                        },
+                        complete: function() {
+                        },
+                        success: function (result) {
+                            if (result.code == 200) {
+                                window.location.href = "/home";
+                            } else {
+                                alert(result.msg);
+                            }
+                        },error: function (result) {
+                            alert("网络连接失败！");
+                        }
+                    });
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>
+</body>
+</html>

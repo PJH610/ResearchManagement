@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>课题基本信息接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>POST：<a href="/api/subject/add">/api/subject/add</a></p>
+        <p>描述：添加课题基本信息</p>
+        <p>参数：name(课题名称，不为空)，classification(学科分类，不为空，传值：<a href="/api/enum/subject/classificaiton">value</a>)，
+            category(课题类别，不为空，传值：<a href="/api/enum/subject/category">value</a>)，
+            final_result(最终成果，不为空)，grants(资助经费，不为空)，complete_time(完成时间，不为空，格式：'yyyy-MM-dd')，
+            financialcategory(经费类别，不为空，传值：<a href="/api/enum/subject/financialcategory">value</a>)，
+            bankcard(银行卡号，不为空)
+        </p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/list">/api/subject/list</a></p>
+        <p>描述：查看课题基本信息</p>
+        <p>参数：page_num(默认为第一页，可为空)，page_size(默认为10条数据，可为空)</p>
+    </li>
+    <li>
+        <p>GET：<a href="/api/subject/show/{id}">/api/subject/show/{id}</a></p>
+        <p>描述：根据id查看课题基本信息</p>
+        <p>参数：id(主键，不为空)</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/update">/api/subject/update</a></p>
+        <p>描述：根据id修改课题基本信息</p>
+        <p>参数：id(主键)，name(课题名称，可为空)，status(状态，可为空)，finalresult(最终成果，可为空)，grants (资助经费，可为空)，completetime(完成时间，可为空)，
+            financialcategory(经费类别，可为空)，bankcard(银行卡号，可为空)，project_number(立项编号，可为空)，project_reference(立项文号，可为空)
+            conclusion_number(结题编号，可为空)，subject_classification(课题分类，可为空)
+        </p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/delete">/api/subject/delete</a></p>
+        <p>描述：根据传入id删除课题基本信息(可批量删除)</p>
+        <p>参数：id</p>
+    </li>
+</ul>
+</body>
+</html>

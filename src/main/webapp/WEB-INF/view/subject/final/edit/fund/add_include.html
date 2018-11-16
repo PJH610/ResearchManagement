@@ -1,0 +1,43 @@
+<h3>添加课题经费</h3>
+<form id="subject-final-fund-add-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>年度：</td>
+            <td><input type="text" autocomplete="off" name="year"></td>
+        </tr>
+        <tr>
+            <td>市教育局资助经费：</td>
+            <td><input type="text" autocomplete="off" name="fund"></td>
+        </tr>
+        <tr>
+            <td>其他经费：</td>
+            <td><input type="text" autocomplete="off" name="other_fund"></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectFinalFundAdd()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectFinalFundAdd() {
+        $.ajax({
+            url: "/api/subject/final/fund/add",
+            type: "post",
+            data: $("#subject-final-fund-add-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/final/edit/fund");
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

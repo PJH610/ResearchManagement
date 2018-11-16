@@ -1,0 +1,54 @@
+<span>添加通知</span>
+<form id="notice-add-form">
+    <table>
+        <tr>
+            <td>主题：</td>
+            <td><input type="text" name="theme" autocomplete="off"></td>
+        </tr>
+        <td>
+            <input type="hidden" name="top" value="false">
+            <input class="top" type="checkbox" onclick="$(this).siblings('input[name=top]').val(($(this).prop('checked') ? 'true' : 'false'));">
+            置顶
+        </td>
+        <tr>
+            <td>作者：</td>
+            <td><input type="text" name="host" autocomplete="off"></td>
+        </tr>
+        <tr>
+            <td>附件：</td>
+            <td><input type="file" name="file"></td>
+        </tr>
+        <tr>
+            <td>正文：</td>
+            <td><textarea name="content"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="提交" onclick="noticeAdd()"></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function noticeAdd() {
+        $.ajax({
+            url: "/api/notice/add",
+            type: "post",
+            data: new FormData($("#notice-add-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    window.location.href = "/notice/list";
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

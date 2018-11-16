@@ -1,0 +1,104 @@
+[
+  {
+    "title": "通知公告",
+    "child": [
+      {
+        "title": "添加通知",
+        "url": "/notice/add"
+      },
+      {
+        "title": "通知列表",
+        "url": "/notice/list"
+      },
+      {
+        "title": "活动列表",
+        "url": "/activity/list"
+      }
+    ]
+  },
+  {
+    "title": "用户管理",
+    "child": [
+      {
+        "title": "申请审核",
+        "url": ""
+      },
+      {
+        "title": "用户列表",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "title": "课题申报",
+    "child": [
+      {
+        "title": "申报时限",
+        "url": "/subject/opentime"
+      },
+      {
+        "title": "课题申报",
+        "url": "/subject/list/city"
+      }
+    ]
+  },
+  {
+    "title": "过程管理",
+    "child": [
+      {
+        "title": "课题列表",
+        "url": "/subject/approval/list/city"
+      },
+      {
+        "title": "开题报告",
+        "url": "/subject/thesis/list/city"
+      },
+      {
+        "title": "中期报告",
+        "url": "/subject/medium/list/city"
+      },
+      {
+        "title": "结题验收",
+        "url": "/subject/final/list/city"
+      },
+      {
+        "title": "重要变更",
+        "url": "/subject/change/list/check"
+      },
+      {
+        "title": "活动审核",
+        "url": "/activity/list/check"
+      }
+    ]
+  },
+  {
+    "title": "备案课题",
+    "child": [
+      {
+        "title": "添加课题",
+        "url": "/record/add"
+      },
+      {
+        "title": "课题列表",
+        "url": "/record/list/city"
+      }
+    ]
+  },
+  {
+    "title": "系统设置",
+    "child": [
+      {
+        "title": "资料修改",
+        "url": "/user/update/info"
+      },
+      {
+        "title": "密码修改",
+        "url": "/user/update/password"
+      },
+      {
+        "title": "退出系统",
+        "url": "/logout"
+      }
+    ]
+  }
+]

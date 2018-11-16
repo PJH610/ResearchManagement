@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>阳江教育科研课题动态管理系统</title>
+    <style type="text/css">
+        html,body { height: 100%; margin: 0; padding: 0; }
+        a {
+            text-decoration:none;
+        }
+        table td {word-break: keep-all;white-space:nowrap;}
+        .shadow {
+            -webkit-box-shadow: #666 0px 0px 10px;
+            -moz-box-shadow: #666 0px 0px 10px;
+            box-shadow: #666 0px 0px 10px;
+        }
+        .page-box a {
+            min-width: 15px;
+            color: black;
+            text-align: center;
+            background: white;
+            border: 1px solid #eeeeee;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 0 2px;
+            display: inline-block;
+        }
+        .page-box span {
+            min-width: 15px;
+            text-align: center;
+            border: 1px solid transparent;
+            padding: 5px 10px;
+            margin: 0 2px;
+            display: inline-block;
+        }
+        .page-box .active {
+            color: white;
+            background: #a0a0a0;
+            border-radius: 5px;
+
+        }
+    </style>
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/jquery.form-3.46.0.js"></script>
+    <script src="/js/jquery.pjax.js"></script>
+    <script src="/js/jquery-pagination-zhuoyue-0.1.0.js"></script>
+    <link ref="stylesheet" href="/css/jquery.fancybox-2.1.7.css" />
+    <script src="/js/jquery.fancybox.pack-2.1.7.js"></script>
+    <script type="text/javascript">
+        function openPage(item) {
+            openUrl($(item).data("url"));
+        }
+
+        function openUrl(url) {
+            // $.pjax({url: url, container: '#pjax-container'});
+            window.location.href = url;
+        }
+
+        function initPage(item, data, func) {
+            if (data.pages > 1) {
+                item.show();
+                item.pagination({
+                    current: data.page_num,
+                    pageCount: data.pages,
+                    count: 2,
+                    jump: true,
+                    coping: true,
+                    prevContent: '上页',
+                    nextContent: '下一页',
+                    callback: function (api) {
+                        func(api.getCurrent());
+                    }
+                });
+            } else {
+                item.hide();
+            }
+        }
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) return pair[1];
+            }
+        }
+
+        function val(a) {
+            if (typeof(a) === "undefined" || a == null) return "";
+            return a;
+        }
+
+        function formatDate(date) {
+            var reg = /^(\d{4})\D*(\d{2})\D*(\d{2})/g;
+            date.replace(reg,function(rs,$1,$2,$3){
+                date = $1 + "-" + $2 + "-" + $3;
+            });
+            return date;
+        }
+    </script>
+</head>
+<body>
+<div style="position: absolute; width: 100%; background: #e0e0e0;">
+    <div style="padding: 5px 10px; position: relative;">
+        <p>阳江教育科研课题动态管理系统</p>
+        <div style="position: absolute; bottom: 0; right: 10px;">
+            <p>欢迎您，<span id="curentuser-realname" style="color: #808080;">$!currentUser.realname</span> 老师</p>
+        </div>
+    </div>
+</div>
+<div  style="width: 180px; height: 100%; float: left; background: #fafafa;">
+    <div style="padding-top: 60px;">
+        <ul>
+#foreach($menu in $menuList)
+            <li>
+                <span>$menu.title</span>
+                <ul>
+#foreach($child in $menu.child)
+                    <li><a data-url="$child.url" onclick="openPage(this)">$child.title</a></li>
+#end
+                </ul>
+            </li>
+#end
+        </ul>
+    </div>
+</div>
+<div style="height: 100%; padding-left: 200px;">
+    <div id="pjax-container" style="padding-top: 80px;">
+#parse("${includePage}")
+    </div>
+</div>
+</body>
+</html>

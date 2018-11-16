@@ -1,0 +1,57 @@
+<h3>修改课题研究人员信息</h3>
+<form id="subject-personnel-post-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <input type="hidden" name="id" value="$!personnel.id">
+    <table>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" autocomplete="off" name="name" value="$!personnel.name"></td>
+        </tr>
+        <tr>
+            <td>年龄：</td>
+            <td><input type="text" autocomplete="off" name="age" value="$!personnel.age"></td>
+        </tr>
+        <tr>
+            <td>单位：</td>
+            <td><input type="text" autocomplete="off" name="unit" value="$!personnel.unit"></td>
+        </tr>
+        <tr>
+            <td>任务分工：</td>
+            <td><input type="text" autocomplete="off" name="task" value="$!personnel.task"></td>
+        </tr>
+        <tr>
+            <td>职务/职称：</td>
+            <td><input type="text" autocomplete="off" name="position" value="$!personnel.position"></td>
+        </tr>
+        <tr>
+            <td>学历/学位：</td>
+            <td><input type="text" autocomplete="off" name="education" value="$!personnel.education"></td>
+        </tr>
+    </table>
+</form>
+<input type="button" value="修改" onclick="subjectPersonnalPost()">
+<input type="button" value="返回" onclick="history.go(-1);">
+<script type="text/javascript">
+    function subjectPersonnalPost() {
+        $.ajax({
+            url: "/api/subject/personnel/update",
+            type: "post",
+            data: $("#subject-personnel-post-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    openUrl("/subject/$!subjectId/edit/personnel");
+                } else {
+                    alert(result.msg);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

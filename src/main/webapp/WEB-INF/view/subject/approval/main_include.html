@@ -1,0 +1,72 @@
+<h3>课题详细信息</h3>
+<table>
+    <tr>
+        <td>课题名称：</td>
+        <td>$!subject.name</td>
+    </tr>
+    <tr>
+        <td>课题类别：</td>
+        <td>$!subject.category.desc</td>
+    </tr>
+    <tr>
+        <td>立项编号：</td>
+        <td>$!subject.projectNumber</td>
+    </tr>
+    <tr>
+        <td>立项文号：</td>
+        <td>$!subject.projectReference</td>
+    </tr>
+    <tr>
+        <td>所属学科：</td>
+        <td>$!subject.classification.desc</td>
+    </tr>
+    <tr>
+        <td>课题分类：</td>
+        <td>阳江市教育科研课题</td>
+    </tr>
+    <tr>
+        <td>支持人姓名：</td>
+        <td>$!subject.user.realname</td>
+    </tr>
+    <tr>
+        <td>支持人单位：</td>
+        <td>$!subject.user.unit.name</td>
+    </tr>
+    <tr>
+        <td>年度：</td>
+        <td>$!dateTool.format('yyyy',$!subject.year)</td>
+    </tr>
+    <tr>
+        <td>课题申报：</td>
+        <td><a href="/subject/$subject.id/show/main">点击浏览</a></td>
+    </tr>
+    <tr>
+        <td>开题报告：</td>
+        <td>
+            #if($!subject.thesisProposal)
+            <a href="$!subject.thesisProposal.fileUri">点击下载</a>
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>中期报告：</td>
+        <td>
+            #if($!subject.mediumReportState)
+            <a href="/subject/$subject.id/medium/show">点击浏览</a>
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>结题报告：</td>
+        <td>
+            #if($!subject.finalReportState)
+            <a href="/subject/$subject.id/final/show/subject">点击浏览</a>
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>结题编号：</td>
+        <td>$!subject.certificateNumber</td>
+    </tr>
+</table>
+<input type="button" value="返回" onclick="history.go(-1);">

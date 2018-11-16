@@ -1,0 +1,61 @@
+<span>备案列表</span>
+<table id="record-list-table"></table>
+<div id="record-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getRecordList(1);
+    });
+
+    var recordListXhr;
+    function getRecordList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/record/list",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].name + '</td>'
+                            + '<td class="classification">' + list[x].classification + '</td>'
+                            + '<td class="host">' + list[x].host + '</td>'
+                            + '<td class="year">' + list[x].year + '</td>'
+                            + '<td>' + initReportStr(list[x].thesis_proposal) + '</td>'
+                            + '<td>' + initReportStr(list[x].medium_report) + '</td>'
+                            + '<td>' + initReportStr(list[x].final_report) + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>课题名称</th>'
+                        + '<th>课题类别</th>'
+                        + '<th>支持人</th>'
+                        + '<th>年度</th>'
+                        + '<th>开题报告</th>'
+                        + '<th>中期报告</th>'
+                        + '<th>结题报告</th>'
+                        + '</tr>';
+                    $("#record-list-table").html(headTr + tr);
+
+                    initPage($("#record-list-page"), data, getRecordList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function initReportStr(report) {
+        return report ? "已提交" : "未提交";
+    }
+</script>

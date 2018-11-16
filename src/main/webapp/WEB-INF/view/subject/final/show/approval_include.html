@@ -1,0 +1,78 @@
+#parse('/subject/final/show/menu_include.html')
+<h3>结题验收意见</h3>
+<table>
+    <tr>
+        <td>1、成果质量是否达到验收要求；课题管理和经费使用是否符合规定；验收所需经费是否有保证：</td>
+        <td>$!finalApproval.schoolNote</td>
+    </tr>
+    <tr>
+        <td>单位负责人姓名：</td>
+        <td>$!finalApproval.schoolLeaderName</td>
+    </tr>
+    <tr>
+        <td>是否同意验收申请：</td>
+        <td>
+            #if($!finalApproval.schoolCheck == true)
+            同意
+            #elseif($!finalApproval.schoolCheck == false)
+            不同意
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>签署时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd',$!finalApproval.schoolCheckTime)</td>
+    </tr>
+    <tr>
+        <td>2、专家指导小组成员结题意见：</td>
+        <td>
+            #if($!finalApproval.expertOpinion)
+            <a href="$!finalApproval.expertOpinion.fileUri">$!finalApproval.expertOpinion.filename</a>
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>3、阳江市教育局教育科研管理部门课题管理人员初审意见：</td>
+        <td>$!finalApproval.firstTrialOpinion</td>
+    </tr>
+    <tr>
+        <td>审核人姓名：</td>
+        <td>$!finalApproval.firstTrialLeaderName</td>
+    </tr>
+    <tr>
+        <td>是否同意验收申请：</td>
+        <td>
+            #if($!finalApproval.firstTrialCheck == true)
+            同意
+            #elseif($!finalApproval.firstTrialCheck == false)
+            不同意
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>签署时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd',$!finalApproval.firstTrialCheckTime)</td>
+    </tr>
+    <tr>
+        <td>4、阳江市教育局教育科研管理部门审批意见：</td>
+        <td>$!finalApproval.finalTrialOpinion</td>
+    </tr>
+    <tr>
+        <td>负责人姓名：</td>
+        <td>$!finalApproval.finalTrialLeaderName</td>
+    </tr>
+    <tr>
+        <td>是否同意验收申请：</td>
+        <td>
+            #if($!finalApproval.finalTrialCheck == true)
+            同意
+            #elseif($!finalApproval.finalTrialCheck == false)
+            不同意
+            #end
+        </td>
+    </tr>
+    <tr>
+        <td>签署时间：</td>
+        <td>$!dateTool.format('yyyy年MM月dd',$!finalApproval.finalTrialCheckTime)</td>
+    </tr>
+</table>

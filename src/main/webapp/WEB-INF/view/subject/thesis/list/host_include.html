@@ -1,0 +1,61 @@
+<h3>开题报告列表</h3>
+<table id="subject-thesis-list-table"></table>
+<div id="subject-thesis-list-page" class="page-box"></div>
+<script type="text/javascript">
+    $(function () {
+        getSubjectThesisList($pageNum);
+    });
+
+    var recordListXhr;
+    function getSubjectThesisList(pageNum) {
+        if (recordListXhr) recordListXhr.abort();
+        recordListXhr = $.ajax({
+            url: "/api/subject/list/thesis",
+            type: "get",
+            data: "page_num=" + pageNum,
+            dataType: "json",
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                if (result.code == 200) {
+                    var data = result.data;
+                    var list = data.list;
+
+                    var tr = "";
+                    for (x in list) {
+                        tr += '<tr data-id="' + list[x].id + '">'
+                            + '<td class="name">' + list[x].name + '</td>'
+                            + '<td class="year">' + list[x].year + '</td>'
+                            + '<td class="classification">' + list[x].classification.desc + '</td>'
+                            + '<td class="thesis_proposal">' + initReportStr(list[x].thesis_proposal) + '</td>'
+                            + '<td>' + initOperate(list[x].thesis_proposal) + '</td>'
+                            + '</tr>';
+                    }
+
+                    var headTr = '<tr>'
+                        + '<th>标题</th>'
+                        + '<th>年度</th>'
+                        + '<th>学科</th>'
+                        + '<th>状态</th>'
+                        + '<th>操作</th>'
+                        + '</tr>';
+                    $("#subject-thesis-list-table").html(headTr + tr);
+
+                    initPage($("#subject-thesis-list-page"), data, getSubjectThesisList);
+                }
+            },error: function (result) {
+
+            }
+        });
+    }
+
+    function initReportStr(thesis) {
+        return thesis ? "已提交" : "未提交";
+    }
+
+    function initOperate(thesis) {
+        return thesis ? '<a href="' + thesis.file_uri + '" target="_blank">下载</a>' : '<span>无</span>';
+    }
+</script>

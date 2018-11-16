@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>SubjectFund接口说明</title>
+</head>
+<body>
+<ul>
+    <li>
+        <p>GET：<a href="/api/subject/fund/show/">/api/subject/fund/show/{subject_id}</a></p>
+        <p>描述：根据课题id查看课题经费</p>
+        <p>参数：subject_id(课题id)</p>
+    </li>
+    <li>
+        <p>POST：<a href="/api/subject/fund/update">/api/subject/fund/update</a></p>
+        <p>描述：根据id修改内容参数</p>
+        <p>参数：subject_id(课题id，关联课题表)，data(资料费，可为空)，
+            travel(差旅费，可为空)，meeting(会议费，可为空)，equipment(设备费，可为空)，service(劳务费，可为空)，
+            print(印刷费，可为空)，Identification(鉴定费，可为空)，other(其他，可为空)，
+            funding(资助经费，可为空)，selfraised(自筹经费，可为空)，
+            budgets_year(经费年度预算年份，数组)，budgets_money(经费年度预算经费，数组)
+        </p>
+    </li>
+</ul>
+</body>
+</html>

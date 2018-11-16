@@ -1,0 +1,55 @@
+<h3>添加课题研究人员信息</h3>
+<form id="subject-final-personnel-add-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" autocomplete="off" name="name"></td>
+        </tr>
+        <tr>
+            <td>年龄：</td>
+            <td><input type="text" autocomplete="off" name="age"></td>
+        </tr>
+        <tr>
+            <td>单位：</td>
+            <td><input type="text" autocomplete="off" name="unit"></td>
+        </tr>
+        <tr>
+            <td>课题所承担工作：</td>
+            <td><input type="text" autocomplete="off" name="task"></td>
+        </tr>
+        <tr>
+            <td>职务/职称：</td>
+            <td><input type="text" autocomplete="off" name="position"></td>
+        </tr>
+        <tr>
+            <td>学历/学位：</td>
+            <td><input type="text" autocomplete="off" name="education"></td>
+        </tr>
+    </table>
+    <input type="button" value="提交" onclick="subjectFinalPersonnalAdd()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function subjectFinalPersonnalAdd() {
+        $.ajax({
+            url: "/api/subject/final/personnel/add",
+            type: "post",
+            data: $("#subject-final-personnel-add-form").serialize(),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    history.go(-1);
+                }
+            },error: function (result) {
+                alert("网络连接出错！");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuoyue.researchManement.dao.SubjectApprovalDao">
+
+    <resultMap id="approvalResultMap" type="com.zhuoyue.researchManement.bean.SubjectApproval">
+        <id column="id" property="id" />
+        <result column="subject_id" property="subjectId" />
+        <result column="school_note" property="schoolNote" />
+        <result column="school_leader_name" property="schoolLeaderName" />
+        <result column="school_check_time" property="schoolCheckTime" />
+        <result column="area_note" property="areaNote" />
+        <result column="area_leader_name" property="areaLeaderName" />
+        <result column="area_check_time" property="areaCheckTime" />
+        <result column="city_note" property="cityNote" />
+        <result column="city_leader_name" property="cityLeaderName" />
+        <result column="city_check_time" property="cityCheckTime" />
+        <association property="subject" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectDao.selectById" />
+        <collection property="specialists" column="subject_id" select="com.zhuoyue.researchManement.dao.SubjectSpecialistDao.listApproval" />
+    </resultMap>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.zhuoyue.researchManement.bean.SubjectApproval">
+        INSERT INTO tb_subjects_approval(subject_id,school_note,school_leader_name,school_check_time,area_note,area_leader_name,area_check_time,city_note,city_leader_name,city_check_time)
+        VALUES (#{subjectId},#{schoolNote},#{schoolLeaderName},#{schoolCheckTime},#{areaNote},#{areaLeaderName},#{areaCheckTime},#{cityNote},#{cityLeaderName},#{cityCheckTime})
+    </insert>
+
+    <select id="list" resultType="com.zhuoyue.researchManement.bean.SubjectApproval">
+        SELECT * FROM tb_subjects_approval
+    </select>
+
+    <select id="selectBySubjectId" resultType="com.zhuoyue.researchManement.bean.SubjectApproval">
+        SELECT * FROM tb_subjects_approval WHERE subject_id=#{subjectId}
+    </select>
+
+    <select id="selectBySubjectIdWithSpecialists" resultMap="approvalResultMap">
+        SELECT * FROM tb_subjects_approval WHERE subject_id=#{subjectId}
+    </select>
+
+    <update id="updateBySubjectId" parameterType="com.zhuoyue.researchManement.bean.SubjectApproval">
+        UPDATE (tb_subjects_approval sa INNER JOIN tb_subjects s ON sa.subject_id=s.id) INNER JOIN tb_users u on s.user_id=u.id
+        <set>
+            <if test="subject != null and subject.state != null">s.state=#{subject.state},</if>
+            <if test="subject != null and subject.projectNumber != null">s.project_number=#{subject.projectNumber},</if>
+            <if test="subject != null and subject.projectReference != null">s.project_reference=#{subject.projectReference},</if>
+            <if test="approval.schoolNote != null">sa.school_note=#{approval.schoolNote},</if>
+            <if test="approval.schoolLeaderName != null">sa.school_leader_name=#{approval.schoolLeaderName},</if>
+            <if test="approval.schoolCheckTime != null">sa.school_check_time=#{approval.schoolCheckTime},</if>
+            <if test="approval.areaNote != null">sa.area_note=#{approval.areaNote},</if>
+            <if test="approval.areaLeaderName != null">sa.area_leader_name=#{approval.areaLeaderName},</if>
+            <if test="approval.areaCheckTime != null">sa.area_check_time=#{approval.areaCheckTime},</if>
+            <if test="approval.cityNote != null">sa.city_note=#{approval.cityNote},</if>
+            <if test="approval.cityLeaderName != null">sa.city_leader_name=#{approval.cityLeaderName},</if>
+            <if test="approval.cityCheckTime != null">sa.city_check_time=#{approval.cityCheckTime}</if>
+        </set>
+        WHERE sa.subject_id=#{approval.subjectId}
+        <if test="states != null">
+            AND s.state IN
+            <foreach item="item" index="index" collection="states" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="unitIds != null">
+            AND u.unit_id IN
+            <foreach item="item" index="index" collection="unitIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_subjects_approval  WHERE id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

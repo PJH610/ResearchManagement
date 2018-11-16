@@ -1,0 +1,109 @@
+<h3>课题中期自评信息</h3>
+<form id="subject-medium-edit-form">
+    <input type="hidden" name="subject_id" value="$!subjectId">
+    <table>
+        <tr>
+            <td>课题名称：</td>
+            <td>$!medium.subject.name</td>
+        </tr>
+        <tr>
+            <td>立项编号：</td>
+            <td>$!medium.subject.projectNumber</td>
+        </tr>
+        <tr>
+            <td>立项文号：</td>
+            <td>$!medium.subject.projectReference</td>
+        </tr>
+        <tr>
+            <td>课题负责人：</td>
+            <td>$!medium.subject.user.realname</td>
+        </tr>
+        <tr>
+            <td>联系电话：</td>
+            <td>$!medium.subject.user.phone</td>
+        </tr>
+        <tr>
+            <td>电子邮箱：</td>
+            <td>$!medium.subject.user.email</td>
+        </tr>
+        <tr>
+            <td>课题时间、地点及评议专家姓名、变更内容：</td>
+            <td><textarea name="changes">$!medium.changes</textarea></td>
+        </tr>
+        <tr>
+            <td>研究进展情况 - 研究是否有调整？</td>
+            <td>
+                #if($medium.adjust == true)
+                <input type="radio" name="adjust" value="false">没有
+                <input type="radio" name="adjust" value="true" checked="checked">有
+                #elseif($medium.adjust == false)
+                <input type="radio" name="adjust" value="false" checked="checked">没有
+                <input type="radio" name="adjust" value="true">有
+                #else
+                <input type="radio" name="adjust" value="false">没有
+                <input type="radio" name="adjust" value="true">有
+                #end
+            </td>
+        </tr>
+        <tr>
+            <td>研究进展情况 - 研究进度调整的原因：</td>
+            <td><textarea name="adjust_reason">$!medium.adjustReason</textarea></td>
+        </tr>
+        <tr>
+            <td>研究进展情况 - 阶段目标达成情况及成果成效简要介绍：</td>
+            <td><textarea name="situation">$!medium.situation</textarea></td>
+        </tr>
+        <tr>
+            <td>经费使用情况 - 立项资助经费：</td>
+            <td><input type="text" name="funds" value="$!medium.funds"></td>
+        </tr>
+        <tr>
+            <td>经费使用情况 - 单位配套经费：</td>
+            <td><input type="text" name="supporting_funds" value="$!medium.supportingFunds"></td>
+        </tr>
+        <tr>
+            <td>经费使用情况 - 已使用经费：</td>
+            <td><input type="text" name="used_funds" value="$!medium.usedFunds"></td>
+        </tr>
+        <tr>
+            <td>经费使用情况 - 附经费使用细目</td>
+            <td><textarea name="funds_detail">$!medium.fundsDetail</textarea></td>
+        </tr>
+        <tr>
+            <td>中期报告上传：</td>
+            <td>
+                #if($medium.file)
+                <a href="$!medium.file.fileUri" target="_blank">$!medium.file.filename</a>
+                #end
+                <input type="file" name="file">
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="保存" onclick="mediumUpdate()">
+    <input type="button" value="返回" onclick="history.go(-1);">
+</form>
+<script type="text/javascript">
+    function mediumUpdate() {
+        $.ajax({
+            url: "/api/subject/medium/update",
+            type: "post",
+            data: new FormData($("#subject-medium-edit-form")[0]),
+            dataType: "json",
+            cache: false, // 上传文件无需缓存
+            processData: false, // 用于对data参数进行序列化处理 这里必须false
+            contentType: false, // 必须
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function (result) {
+                alert(result.msg);
+                if (result.code == 200) {
+                    openUrl("/subject/medium/list/host");
+                }
+            },error: function (result) {
+                alert("网络连接失败！");
+            }
+        });
+    }
+</script>
